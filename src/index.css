@@ -11,3 +11,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face {
+  font-family: 'StratosSkyeng';
+  src: local("StratosSkyeng"),
+  local("StratosSkyeng"),
+  url("/public/fonts/StratosSkyeng.woff2") format("woff2"),
+  url("/public/fonts/StratosSkyeng.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+}

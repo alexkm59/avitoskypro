@@ -93,7 +93,7 @@ a {
           align-items: center;
   -webkit-box-pack: end;
       -ms-flex-pack: end;
-          justify-content: flex-end;
+          justify-content: end;
 }
 
 .header__btn-main-enter {
@@ -110,6 +110,7 @@ a {
 .main__container {
   max-width: 1178px;
   margin: 0 auto;
+  height: 100%;
   padding: 52px 10px 37px;
 }
 
@@ -230,7 +231,7 @@ a {
   color: #FFFFFF;
 }
 
-.cards {
+.main_cards {
   max-width: 1158px;
   width: 100%;
   display: -ms-grid;
@@ -246,7 +247,7 @@ a {
   scrollbar-color: #FFFFFF #2E2E2E;
   scrollbar-width: thin;
   scrollbar-width: 0px;
-  height: 922px;
+  height: auto;
 }
 
 .cards::-webkit-scrollbar {
@@ -337,7 +338,7 @@ a {
     display: -ms-grid;
     display: grid;
     -ms-grid-columns: (270px)[2];
-    grid-template-columns: repeat(2, 270px);
+        grid-template-columns: repeat(2, 270px);
   }
 }
 
@@ -578,4 +579,3 @@ a {
        object-fit: cover;
   }
 }
-
