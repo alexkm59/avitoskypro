@@ -4,32 +4,25 @@ import { getImagesById } from "../api";
 import { useSelector } from "react-redux";
 
 export const CardsItem = ({ key, title, price, city, time, imagesId }) => {
-    const allImages = useSelector((state) => state.images.allImages);
-    const URL = "http://localhost:8090/";
-    let u ;
-    console.log(imagesId);
-    console.log(allImages.imagesId);
+  const allImages = useSelector((state) => state.images.allImages);
+  const URL = "http://localhost:8090/";
+  let imgUrl;
 
-    if(allImages){
-      let idToLookFor = imagesId;
-      let foundObject = allImages.find(function(item) {
-        return item.id === idToLookFor;
-      });
-  
-      console.log(foundObject);
-      u = `${URL}`+`${foundObject?.url}`;
-      console.log(u);
+  if (imagesId) {
+    let idToLookFor = imagesId;
+    let foundObject = allImages.find(function (item) {
+      return item.id === idToLookFor;
+    });
 
-    }
+    imgUrl = `${URL}` + `${foundObject?.url}`;
+  }
 
-    
-    
-return (
+  return (
     <div className="cards__item" key={key}>
       <div className="cards__card card">
         <div className="card__image">
           <a href="/" target="_blank">
-            <img src={`${u}`} alt="ads_picture"> </img>
+            {imagesId ? <img src={`${imgUrl}`} alt="ads_picture" /> : null}
           </a>
         </div>
         <div className="card__content">
