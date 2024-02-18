@@ -6,26 +6,30 @@ import { useSelector } from "react-redux";
 export const CardsItem = ({ key, title, price, city, time, imagesId }) => {
     const allImages = useSelector((state) => state.images.allImages);
     const URL = "http://localhost:8090/";
+    let u ;
     console.log(imagesId);
     console.log(allImages.imagesId);
 
-    let idToLookFor = imagesId;
-    let foundObject = allImages.find(function(item) {
-      return item.id === idToLookFor;
-    });
-
-    console.log(foundObject);
+    if(allImages){
+      let idToLookFor = imagesId;
+      let foundObject = allImages.find(function(item) {
+        return item.id === idToLookFor;
+      });
   
-    let u = `${URL}`+`${foundObject.url}`;
+      console.log(foundObject);
+      u = `${URL}`+`${foundObject?.url}`;
+      console.log(u);
 
-    console.log(u);
+    }
+
+    
     
 return (
     <div className="cards__item" key={key}>
       <div className="cards__card card">
         <div className="card__image">
           <a href="/" target="_blank">
-            <img src={`${URL}`+ `${foundObject.url}`} alt="picture4"> </img>
+            <img src={`${u}`} alt="ads_picture"> </img>
           </a>
         </div>
         <div className="card__content">
