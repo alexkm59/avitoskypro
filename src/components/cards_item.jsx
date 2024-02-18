@@ -1,12 +1,21 @@
 import { React } from "react";
 import "../css/main.css";
 import { getImagesById } from "../api";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { getActiveAdsId } from "../store/thunks/thunk";
 
-export const CardsItem = ({ key, title, price, city, time, imagesId }) => {
+
+export const CardsItem = ({ id, title, price, city, time, imagesId }) => {
+  const dispatch = useDispatch();
   const allImages = useSelector((state) => state.images.allImages);
   const URL = "http://localhost:8090/";
   let imgUrl;
+
+  const setActiveAds = (id) => {
+    console.log(`Выбрано объявление №${id}`);
+    dispatch(getActiveAdsId(id));
+  };
 
   if (imagesId) {
     let idToLookFor = imagesId;
@@ -18,17 +27,28 @@ export const CardsItem = ({ key, title, price, city, time, imagesId }) => {
   }
 
   return (
-    <div className="cards__item" key={key}>
+    <div className="cards__item" key={id}>
       <div className="cards__card card">
         <div className="card__image">
-          <a href="/" target="_blank">
-            {imagesId ? <img src={`${imgUrl}`} alt="ads_picture" /> : null}
-          </a>
+          <Link to="/adv_page">
+            <a href="/" target="_blank"
+              onClick={() => {
+                setActiveAds(id);
+              }}
+            >
+              {imagesId ? <img src={`${imgUrl}`} alt="ads_picture" /> : null}
+            </a>
+          </Link>
         </div>
         <div className="card__content">
-          <a href="/" target="_blank">
-            <h3 className="card__title">{title}</h3>
-          </a>
+          <Link to="/adv_page">
+            <a href="/" target="_blank" onClick={() => {
+                setActiveAds(id);
+              }}>
+              <h3 className="card__title">{title}</h3>
+            </a>
+          </Link>
+
           <p className="card__price">{price}₽</p>
           <p className="card__place">{city}</p>
           <p className="card__date">{time}</p>

@@ -21,6 +21,9 @@ export const MainPage = () => {
     // })
   }, []);
 
+
+
+  
   if (isLoading) {
     console.log(`Идет загрузка...`);
   }
@@ -91,7 +94,7 @@ export const MainPage = () => {
                     
                     return (
                       <CardsItem
-                        key={oneAds.id}
+                        id={oneAds.id}
                         title={oneAds.title}
                         price={oneAds.price}
                         city={oneAds.user.city}

@@ -26,6 +26,19 @@ export async function getImages() {
     return data;
   }
 
+// Получение объявления по ID
+export async function getAdvertisById(id) {
+  const Response = await fetch(URL + "ads" + "/" + `${id}`);
+
+  if (!Response.ok) {
+    if (Response.status === 500) {
+      throw new Error("Ошибка сервера");
+    }
+  }
+  const data = await Response.json();
+  return data;
+}
+
 
 
 // Получение изображение по ID

@@ -4,6 +4,7 @@ import { MainPage } from "./pages/main";
 import { LoginPage } from "./pages/signin";
 import { SignUpPage } from "./pages/signup";
 import { ProfilePage } from "./pages/profile";
+import { AdvPage } from "./pages/adv_page";
 
 export const AppRoutes = () => {
   return (
@@ -12,6 +13,7 @@ export const AppRoutes = () => {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignUpPage />} />
       <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/adv_page" element={<AdvPage />} />
       
     </Routes>
   );

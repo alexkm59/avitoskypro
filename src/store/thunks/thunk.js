@@ -4,11 +4,14 @@ import {
   allAdsLoadingSuccess,
   allAdsLoadingFailure,
 } from "../slices/ads";
+
 import {
   allImagesLoadingStart,
   allImagesLoadingSuccess,
   allImagesLoadingFailure,
 } from "../slices/images";
+
+import {activeAdsIdLoading} from "../slices/adsItem"
 
 export const fetchAds = () => async (dispatch, getState) => {
   dispatch(allAdsLoadingStart());
@@ -34,7 +37,11 @@ export const fetchAllImages = () => async (dispatch, getState) => {
   }
 };
 
-
+export const getActiveAdsId = (id) => async (dispatch, getState) => {
+ 
+    dispatch(activeAdsIdLoading(id));
+  
+};
 
 
 

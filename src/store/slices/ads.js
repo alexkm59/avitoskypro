@@ -4,6 +4,7 @@ const initialState = {
   loading: false,
   error: null,
   allAds: [],
+  
 };
 
 export const adsSlice = createSlice({
@@ -34,8 +35,5 @@ export const {
   allAdsLoadingStart,
   allAdsLoadingSuccess,
   allAdsLoadingFailure,
-  allImagesLoadingStart,
-  allImagesLoadingSuccess,
-  allImagesLoadingFailure,
 } = adsSlice.actions;
 export default adsSlice.reducer;
