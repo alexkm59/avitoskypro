@@ -2,14 +2,12 @@ import { configureStore } from "@reduxjs/toolkit";
 import adsSlice from "./slices/ads";
 import { thunk } from "redux-thunk";
 import imagesSlice from "./slices/images";
-import activeAdsSlice from "./slices/adsItem";
-
+import userSlice from "./slices/user";
 
 export const store = configureStore({
   reducer: {
     ads: adsSlice,
     images: imagesSlice,
-    activeAdsId: activeAdsSlice,
+    user: userSlice,
   },
-  // middleware: [thunk],
 });

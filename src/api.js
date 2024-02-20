@@ -54,3 +54,34 @@ export async function getImagesById(id) {
     console.log(Response);
     return Response;
   }
+
+  // Регистрация пользователя
+export async function userRegistration({email, password, name, surname, city}) {
+  const Response = await fetch(`${URL}auth/register`, {
+  method: "POST",
+  body: JSON.stringify({
+    password: password,
+    email: email,
+    name: name,
+    surname: surname,
+    city: city
+
+  }),
+  headers: {
+    // API требует обязательного указания заголовка content-type, так апи понимает что мы посылаем ему json строчку в теле запроса
+    "content-type": "application/json",
+  },
+})
+
+  if (!Response.ok) {
+    if (Response.status === 500) {
+      throw new Error("Ошибка сервера");
+    }
+  }
+
+  console.log(Response);
+  return Response;
+}
+
+
+  

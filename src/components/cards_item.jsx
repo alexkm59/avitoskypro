@@ -4,6 +4,7 @@ import { getImagesById } from "../api";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getActiveAdsId } from "../store/thunks/thunk";
+import { TimeTransform } from "./time_transform";
 
 
 export const CardsItem = ({ id, title, price, city, time, imagesId }) => {
@@ -25,6 +26,9 @@ export const CardsItem = ({ id, title, price, city, time, imagesId }) => {
 
     imgUrl = `${URL}` + `${foundObject?.url}`;
   }
+
+  let dateTime = TimeTransform(time);
+console.log(dateTime);
 
   return (
     <div className="cards__item" key={id}>
@@ -51,7 +55,7 @@ export const CardsItem = ({ id, title, price, city, time, imagesId }) => {
 
           <p className="card__price">{price}₽</p>
           <p className="card__place">{city}</p>
-          <p className="card__date">{time}</p>
+          <p className="card__date">{dateTime}</p>
         </div>
       </div>
     </div>

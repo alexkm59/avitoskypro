@@ -82,7 +82,7 @@ a {
 
 .modal__form-login {
   width: 366px;
-  height: 647px;
+  height: 100%;
   background-color: #FFFFFF;
   border-radius: 12px;
   display: -webkit-box;
@@ -256,3 +256,4 @@ a {
     line-height: 24px;
   }
 }
+

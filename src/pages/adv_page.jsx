@@ -3,12 +3,67 @@ import "../css/article.css";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAds, fetchAllImages } from "../store/thunks/thunk";
+import { monthTransform } from "../components/date_transform";
+import { PhotoBar } from "../components/photo_bar";
+import {TimeTransform} from "../components/time_transform";
 
 
 export const AdvPage = () => {
     const dispatch = useDispatch();
     const allAds = useSelector((state) => state.ads.allAds);
+    const activeAdsId = useSelector((state) => state.ads.activeAdsId);
     const allImages = useSelector((state) => state.images.allImages);
+    let activeAds = null;
+    let sellsFromMonth;
+    let sellsFromYear;
+    const [isTelShow, setIsTelShow] = useState(false);
+    const URL = "http://localhost:8090/";
+    // поиск выбранного объявления activeAds по ID
+    if (activeAdsId) {
+        let idToLookFor = activeAdsId;
+         activeAds = allAds.find(function (item) {
+            return item.id === idToLookFor;
+        });
+        sellsFromMonth = monthTransform(activeAds.user.sells_from);
+        sellsFromYear = activeAds.user.sells_from.slice(0,4);
+    
+    }
+
+//    Переключение просмотра телефона
+
+const toggleTelShow = () =>{
+    !isTelShow ? setIsTelShow(true) : setIsTelShow(false);
+
+}
+
+// поиск картинки для отображения
+let imgUrl = null;
+if (activeAds?.images[0]?.id) {
+    let idToLookFor = activeAds?.images[0]?.id;
+    let foundObject = allImages.find(function (item) {
+      return item.id === idToLookFor;
+    });
+
+    imgUrl = `${URL}` + `${foundObject?.url}`;
+  }
+
+let imgArr = [];
+  if (activeAds?.images) {
+    for(let i=1; i < activeAds?.images.length; i++ ){
+        let idToLookFor = activeAds?.images[i]?.id;
+        let foundObject = allImages.find(function (item) {
+          return item.id === idToLookFor;
+        });
+    
+       let imgUrlItem = `${URL}` + `${foundObject?.url}`;
+       imgArr.push(imgUrlItem);
+        }
+
+  }
+
+  
+
+  let dateTime = TimeTransform(activeAds.created_on);
 
 return(
     <div className="wrapper">
@@ -32,8 +87,12 @@ return(
                         <a className="menu__logo-link" href="" target="_blank">
                             <img className="menu__logo-img" src="img/logo.png" alt="logo"/>
                         </a>
-                        <form className="menu__form" action="#">                            
+                        <form className="menu__form" action="#">
+                            <Link to='/'>
                             <button className="menu__btn-serch btn-hov02" id="btnGoBack">Вернуться на главную</button>
+                            </Link>
+                           
+                        
                         </form>                    
                     </div>                    
                 </div>
@@ -43,27 +102,21 @@ return(
                             <div className="article__left">
                                 <div className="article__fill-img">
                                     <div className="article__img">                                        
-                                            <img src="" alt=""/>                                        
+                                            <img src={`${imgUrl}`} alt="mein Image"/>                                        
                                     </div>                                    
                                     <div className="article__img-bar">
-                                        <div className="article__img-bar-div">
-                                            <img src="" alt=""/>
-                                        </div>
-                                        <div className="article__img-bar-div">
-                                            <img src="" alt=""/>
-                                        </div>
-                                        <div className="article__img-bar-div">
-                                            <img src="" alt=""/>
-                                        </div>
-                                        <div className="article__img-bar-div">
-                                            <img src="" alt=""/>
-                                        </div>
-                                        <div className="article__img-bar-div">
-                                            <img src="" alt=""/>
-                                        </div>
-                                        <div className="article__img-bar-div">
-                                            <img src="" alt=""/>
-                                        </div>
+                                        {/*Отрисовка подвала с доп картинками  */}
+                                    {imgArr.map((oneImg) => {  
+                                            return (
+                                            <PhotoBar 
+                                                imgUrl={oneImg}>
+                                                
+                                            </PhotoBar>
+                                                
+                                            );
+                                        })}
+                                        
+                                        
                                     </div>
                                     <div className="article__img-bar-mob img-bar-mob">
                                         <div className="img-bar-mob__circle circle-active"></div>
@@ -76,23 +129,34 @@ return(
                             </div>
                             <div className="article__right">
                                 <div className="article__block">
-                                    <h3 className="article__title title">Ракетка для большого тенниса Triumph Pro STС Б/У</h3>
+                                    <h3 className="article__title title">{activeAds.title}</h3>
                                     <div className="article__info">
-                                        <p className="article__date">Сегодня в 10:45</p>
-                                        <p className="article__city">Санкт-Петербург</p>
+                                        <p className="article__date">{dateTime}</p>
+                                        <p className="article__city">{activeAds.user.city}</p>
                                         <a className="article__link" href="" target="_blank" rel="">23 отзыва</a>
                                     </div>
-                                    <p className="article__price">2 200 ₽</p>
-                                    <button className="article__btn btn-hov02" >Показать&nbsp;телефон 
+                                    <p className="article__price">{activeAds.price} ₽</p>
+                                    {isTelShow ? (<button className="article__btn btn-hov02" onClick={()=>toggleTelShow()}>
+                                        
+                                        <span>{activeAds.user.phone}</span>
+                                    
+                                    </button>):(<button className="article__btn btn-hov02" onClick={()=>toggleTelShow()}>
+                                        Показать&nbsp;телефон 
                                         <span>8&nbsp;905&nbsp;ХХХ&nbsp;ХХ&nbsp;ХХ</span>
-                                    </button>
+                                    
+                                    </button>)}
+                                    
                                     <div className="article__author author">
                                         <div className="author__img">
                                             <img src="" alt=""/>
                                         </div>
                                         <div className="author__cont">
-                                            <p className="author__name">Кирилл</p>
-                                            <p className="author__about">Продает товары с августа 2021</p>
+                                        <Link to='/seller_profile'>
+                                            <a className="author__name">{activeAds.user.name}</a>
+                                        </Link>
+                                            
+
+                                            <p className="author__about">Продает товары с {sellsFromMonth} {sellsFromYear}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -105,7 +169,7 @@ return(
                         Описание товара
                     </h3>
                     <div className="main__content">
-                        <p className="main__text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        <p className="main__text">{activeAds?.description}</p>
                                                 
                     </div>
                     

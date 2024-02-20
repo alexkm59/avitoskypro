@@ -1,8 +1,9 @@
-import { getAlladvertis, getImages } from "../../api";
+import { getAlladvertis, getImages, userRegistration } from "../../api";
 import {
   allAdsLoadingStart,
   allAdsLoadingSuccess,
   allAdsLoadingFailure,
+  activeAdsIdLoading
 } from "../slices/ads";
 
 import {
@@ -11,7 +12,13 @@ import {
   allImagesLoadingFailure,
 } from "../slices/images";
 
-import {activeAdsIdLoading} from "../slices/adsItem"
+import {
+  userRegistrationStart,
+    userRegistrationSuccess,
+    userRegistrationFailure,
+} from "../slices/user";
+
+// import {activeAdsIdLoading} from "../slices/adsItem"
 
 export const fetchAds = () => async (dispatch, getState) => {
   dispatch(allAdsLoadingStart());
@@ -23,7 +30,6 @@ export const fetchAds = () => async (dispatch, getState) => {
     dispatch(allAdsLoadingFailure(error));
   }
 };
-
 
 
 export const fetchAllImages = () => async (dispatch, getState) => {
@@ -43,7 +49,16 @@ export const getActiveAdsId = (id) => async (dispatch, getState) => {
   
 };
 
+export const fetchUserRegistration = () => async (dispatch, getState) => {
+  dispatch(userRegistrationStart());
 
+  try {
+    const data = await userRegistration();
+    dispatch(userRegistrationSuccess(data));
+  } catch (error) {
+    dispatch(userRegistrationFailure(error));
+  }
+};
 
 
 

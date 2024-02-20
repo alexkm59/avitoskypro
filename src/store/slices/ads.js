@@ -4,7 +4,7 @@ const initialState = {
   loading: false,
   error: null,
   allAds: [],
-  
+  activeAdsId: null,
 };
 
 export const adsSlice = createSlice({
@@ -28,6 +28,12 @@ export const adsSlice = createSlice({
       state.loading = false;
       state.error = error;
     },
+    
+    activeAdsIdLoading: (state, action) => {
+      state.activeAdsId = action.payload;
+    },
+  
+  
   },
 });
 
@@ -35,5 +41,6 @@ export const {
   allAdsLoadingStart,
   allAdsLoadingSuccess,
   allAdsLoadingFailure,
+  activeAdsIdLoading,
 } = adsSlice.actions;
 export default adsSlice.reducer;
