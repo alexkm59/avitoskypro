@@ -5,40 +5,44 @@ import {Link, useNavigate} from 'react-router-dom';
 import { fetchUserRegistration } from '../store/thunks/thunk';
 
 export const SignUpPage = ()  => {
+    const navigate = useNavigate();
+    const [userData, setUserData] = useState({
+        userEmail: "",
+        userPassword: "",
+        confirmPassword:"",
+        userName: "",
+        userSurname: "",
+        userСity:"",
+    });
 
-const [userEmail, setUserEmail] = useState("");
-const [userPassword, setUserPassword] = useState("");
-const [confirmPassword, setConfirmPassword] = useState("");
-const [userName, setUserName] = useState("");
-const [userSurname, setUserSurname] = useState("");
-const [userSity, setUserSity] = useState("");
+
 const [registrationError, setRegistrationError] = useState(null);
 const [registrationLoading, setRegistrationLoading] = useState(false);
-const activeUserName = useSelector((state) => state.user.userName);
+const activeUserId = useSelector((state) => state.user.id);
+const isLoading = useSelector((state)=> state.user.loading);
+const registrationAPIError = useSelector((state)=> state.user.error);
 const dispatch = useDispatch();
-// const navigate = useNavigate();
+
 
 // Установка стейтов регистрации и валидация формы регистрации
 const userRegistration = ()=>{
-    // Выключаем кнопку регистрации на время загрузки 
-        setRegistrationLoading(true);
     
-        if(userEmail !== ""){
-            console.log({userEmail});
+        if(userData.userEmail !== ""){
+            console.log(userData.userEmail);
         }
         else{
             setRegistrationError("Заполните почту!");
             return
         }
-        if(userPassword !== ""){
-            console.log({userPassword});
+        if(userData.userPassword !== ""){
+            console.log(userData.userPassword);
         }
         else{
             setRegistrationError("Укажите пароль!");
             return
         }
-        if(userPassword === confirmPassword){
-            console.log({userPassword});
+        if(userData.userPassword === userData.confirmPassword){
+            console.log(userData.userPassword);
         }
         else{
             setRegistrationError("Укажите идентичные пароли!");
@@ -46,19 +50,32 @@ const userRegistration = ()=>{
         }
     
 // после проверки вызвать диспатч регистрации пользователя
-    dispatch(fetchUserRegistration());
+  
+dispatch(fetchUserRegistration({email: userData.userEmail, password: userData.userPassword, name: userData.userName, surname: userData.userSurname, city: userData.userСity}))
+.then(()=>{if(!registrationAPIError){
+    console.log(registrationAPIError);
+    navigate("/login");
+} });
 
 
+    }
+// функция обновления состояния данных пользователя
+    const handleInputChange = (e) =>{
+        const {name, value} = e.target; // Извлекаем имя поля и его значение
+        setUserData({
+            ...userData, // Копируем текущие данные из состояния
+            [name]: value, // Обновляем нужное поле
+          });
 
     }
 
 // Сбрасываем ошибку если пользователь меняет данные на форме или меняется режим формы
     useEffect(() => {
     setRegistrationError(null);
-  }, [userEmail, userPassword, confirmPassword]);
+  }, [userData]);
 
 
-console.log(activeUserName);
+
 
     return(
 
@@ -70,18 +87,19 @@ console.log(activeUserName);
                     <div className="modal__logo">
                         <img src="../img/logo_modal.png" alt="logo"/>
                     </div>
-                    <input className="modal__input login" type="text" placeholder="email" value={userEmail} onChange={(event)=>{setUserEmail(event.target.value)}}/>
-                    <input className="modal__input password-first" type="password"  placeholder="Пароль" value={userPassword} onChange={(event)=>{setUserPassword(event.target.value)}}/>
-                    <input className="modal__input password-double" type="password"  placeholder="Повторите пароль" value={confirmPassword} onChange={(event)=>{setConfirmPassword(event.target.value)}}/>
-                    <input className="modal__input first-name" type="text" placeholder="Имя (необязательно)" value={userName} onChange={(event)=>{setUserName(event.target.value)}}/>
-                    <input className="modal__input first-last" type="text" placeholder="Фамилия (необязательно)" value={userSurname} onChange={(event)=>{setUserSurname(event.target.value)}}/>
-                    <input className="modal__input city" type="text" placeholder="Город (необязательно)" value={userSity} onChange={(event)=>{setUserSity(event.target.value)}}/>
+                    <input className="modal__input login" type="text" placeholder="email" name="userEmail" onChange={handleInputChange}/>
+                    <input className="modal__input password-first" type="password"  placeholder="Пароль" name="userPassword" onChange={handleInputChange}/>
+                    <input className="modal__input password-double" type="password"  placeholder="Повторите пароль" name="confirmPassword" onChange={handleInputChange}/>
+                    <input className="modal__input first-name" type="text" placeholder="Имя (необязательно)" name="userName" onChange={handleInputChange}/>
+                    <input className="modal__input first-last" type="text" placeholder="Фамилия (необязательно)" name="userSurname" onChange={handleInputChange}/>
+                    <input className="modal__input city" type="text" placeholder="Город (необязательно)" name="userSity" onChange={handleInputChange}/>
                     
                     <div className="modal__error">{registrationError ? registrationError : null}</div>
                     
                     <div className="modal__btn-signup-ent" >
-                        <a onClick={()=> userRegistration()}>Зарегистрироваться</a> 
+                    {isLoading ?(<a>Регистрация...</a> ):(<a onClick={()=> userRegistration()}>Зарегистрироваться</a>)}  
                         
+
                     </div>
                 </form>
             </div>

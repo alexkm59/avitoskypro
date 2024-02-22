@@ -28,7 +28,6 @@ export const CardsItem = ({ id, title, price, city, time, imagesId }) => {
   }
 
   let dateTime = TimeTransform(time);
-console.log(dateTime);
 
   return (
     <div className="cards__item" key={id}>

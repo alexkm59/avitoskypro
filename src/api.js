@@ -79,9 +79,46 @@ export async function userRegistration({email, password, name, surname, city}) {
     }
   }
 
-  console.log(Response);
-  return Response;
+  const data = await Response.json();
+  console.log(data);
+  return data;
 }
 
+
+  // Логирование пользователя
+  export async function userLoginApi({login, password}) {
+    const Response = await fetch(`${URL}auth/login`, {
+    method: "POST",
+    body: JSON.stringify({
+      email: login,
+      password: password,
+      
+      
+    }),
+    headers: {
+      // API требует обязательного указания заголовка content-type, так апи понимает что мы посылаем ему json строчку в теле запроса
+      "content-type": "application/json",
+    },
+  })
+  // const data = await Response.json();
+  // if (!Response.ok) {
+  //   console.log(data.detail[0].msg);
+  //   // return data;
+  //   // throw new Error("Ошибка сервера");
+  
+  //   throw new Error(data.detail[0].msg);
+    
+    
+  // }else{
+   
+  //   console.log(data);
+  //   return data;
+
+  // }
+  // const data = await Response.json();
+  // console.log(data);
+  return Response;
+
+  }
 
   

@@ -1,4 +1,4 @@
-import { getAlladvertis, getImages, userRegistration } from "../../api";
+import { getAlladvertis, getImages, userLoginApi, userRegistration } from "../../api";
 import {
   allAdsLoadingStart,
   allAdsLoadingSuccess,
@@ -13,9 +13,12 @@ import {
 } from "../slices/images";
 
 import {
-  userRegistrationStart,
+    userRegistrationStart,
     userRegistrationSuccess,
     userRegistrationFailure,
+    userLoginStart,
+    userLoginSuccess,
+    userLoginFailure,
 } from "../slices/user";
 
 // import {activeAdsIdLoading} from "../slices/adsItem"
@@ -49,16 +52,41 @@ export const getActiveAdsId = (id) => async (dispatch, getState) => {
   
 };
 
-export const fetchUserRegistration = () => async (dispatch, getState) => {
-  dispatch(userRegistrationStart());
+export const fetchUserRegistration = ({email, password, name, surname, city}) => async (dispatch, getState) => {
+ 
+  dispatch(userRegistrationStart({email, password , name, surname, city}));
 
   try {
-    const data = await userRegistration();
+    const data = await userRegistration({email, password , name, surname, city});
     dispatch(userRegistrationSuccess(data));
+    
   } catch (error) {
     dispatch(userRegistrationFailure(error));
   }
 };
 
+export const fetchUserLogin = ({login, password}) => async (dispatch, getState) => {
+ 
+  dispatch(userLoginStart());
 
+  try {
+    const Response = await userLoginApi({login, password});
+    
+    const data = await Response.json();
+    console.log(data);
+    console.log(Response);
+    
+    if (!Response.ok) {
+      dispatch(userLoginFailure("Логин или пароль не верны. Скорректируйте данные."));
+    }else{
+      dispatch(userLoginSuccess(data));
+    }
+
+    
+    }
+    
+  catch(error) {
+    dispatch(userLoginFailure(error));
+  }
+};
 

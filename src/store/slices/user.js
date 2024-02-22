@@ -9,6 +9,8 @@ const initialState = {
   userСity:"",
   loading: false,
   error: null,
+  accessToken:"",
+  refreshToken:"",
   
 };
 
@@ -38,10 +40,26 @@ export const userSlice = createSlice({
       console.log(error);
     },
     
-    // activeAdsIdLoading: (state, action) => {
-    //   state.activeAdsId = action.payload;
-    // },
-  
+
+
+    userLoginStart: (state, action) => {
+      state.loading = true;
+    },
+
+    userLoginSuccess: (state, action) => {
+      const user = action.payload;
+      state.accessToken = user.access_token;
+      state.refreshToken = user.refresh_token;
+      state.loading = false;
+    },
+
+    userLoginFailure: (state, action) => {
+      const error = action.payload;
+      state.loading = false;
+      state.error = error;
+      // state.error = error.detail[0].msg;
+
+    },
   
   },
 });
@@ -50,5 +68,8 @@ export const {
     userRegistrationStart,
     userRegistrationSuccess,
     userRegistrationFailure,
+    userLoginStart,
+    userLoginSuccess,
+    userLoginFailure,
 } = userSlice.actions;
 export default userSlice.reducer;
