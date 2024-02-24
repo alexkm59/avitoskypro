@@ -2,7 +2,7 @@ import {React, useEffect, useState} from 'react';
 import '../css/signin.css';
 import {Link, useNavigate} from 'react-router-dom';
 import {useDispatch, useSelector } from "react-redux";
-import { fetchUserLogin } from '../store/thunks/thunk';
+import { fetchUserInput, fetchUserLogin } from '../store/thunks/thunk';
 import { userLoginFailure } from '../store/slices/user';
 export const LoginPage = ()  => {
 const activeUserId = useSelector((state) => state.user.userId);
@@ -10,7 +10,7 @@ const activeUserId = useSelector((state) => state.user.userId);
 const dispatch = useDispatch();
 const navigate = useNavigate();
 
-const userAccessToken = useSelector((state)=> state.user.accessToken);
+const token = useSelector((state)=> state.user.accessToken);
 const isLoading = useSelector((state)=> state.user.loading);
 const loginErrorApi = useSelector((state)=> state.user.error);
 const [loginError, setLoginError] = useState(null);
@@ -20,32 +20,46 @@ const [userLoginForm, setUserLoginForm] = useState({
     password: "",
 });
 
-console.log(loginError);
-console.log(loginErrorApi);
 
-// Проверка на ошибку регистрации
-useEffect(() => {
-    setLoginError(loginErrorApi);
-  
-  }, [loginErrorApi]);
+
+
+
+const checkBeforeIn = ()=>{
+    if(loginError || loginErrorApi){
+        console.log(`отрицательная ветка входа`);
+        setLoginError(loginErrorApi);
+        
+    }else{
+        console.log(`положительная ветка входа`);
+    // navigate("/profile");
+    }
+
+}
+
+
+
 
 const startLogin = ({loginError, loginErrorApi}) => {
     console.log(loginError);
     console.log(loginErrorApi);
     
-        if(!loginError && !loginErrorApi){
+        // if(!loginError && !loginErrorApi){
     // после проверки вызвать диспатч регистрации пользователя
     console.log(`зашли в диспатч`);
     dispatch(fetchUserLogin({login: userLoginForm.login, password: userLoginForm.password}))
-    .then(()=>{
+    // .then(()=>{
+    //     console.log(loginErrorApi);
+    //     if(!loginErrorApi){
+    //         console.log(`положительная ветка регистрации`);
+    //         navigate("/profile");
+    //     }else{
+    //         console.log(`отрицательная ветка регистрации`);
+    //         setLoginError(loginErrorApi);
+    //     }
         
-           
-                // navigate("/profile");
-        });
-    
-        }else{
-            setLoginError(loginErrorApi);
-        }
+    //     });
+
+    checkBeforeIn();
 
 
 }
@@ -87,8 +101,15 @@ const handleInputChange = (e) =>{
 // Сбрасываем ошибку если пользователь меняет данные на форме или меняется режим формы
 useEffect(() => {
     setLoginError(null);
-    dispatch(userLoginFailure(""));
+    // dispatch(userLoginFailure(""));
   }, [userLoginForm]);
+
+ // Проверка на ошибку регистрации
+useEffect(() => {
+    setLoginError(loginErrorApi);
+  
+  }, [loginErrorApi]);
+
 
 return(
 <div className="wrapper">

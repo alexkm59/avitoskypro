@@ -85,7 +85,7 @@ export async function userRegistration({email, password, name, surname, city}) {
 }
 
 
-  // Логирование пользователя
+  // Логирование пользователя, получение токена
   export async function userLoginApi({login, password}) {
     const Response = await fetch(`${URL}auth/login`, {
     method: "POST",
@@ -93,32 +93,38 @@ export async function userRegistration({email, password, name, surname, city}) {
       email: login,
       password: password,
       
-      
     }),
     headers: {
       // API требует обязательного указания заголовка content-type, так апи понимает что мы посылаем ему json строчку в теле запроса
       "content-type": "application/json",
     },
   })
-  // const data = await Response.json();
-  // if (!Response.ok) {
-  //   console.log(data.detail[0].msg);
-  //   // return data;
-  //   // throw new Error("Ошибка сервера");
   
-  //   throw new Error(data.detail[0].msg);
-    
-    
-  // }else{
-   
-  //   console.log(data);
-  //   return data;
-
-  // }
-  // const data = await Response.json();
-  // console.log(data);
   return Response;
 
   }
 
-  
+  // Логирование пользователя, получение данных пользователя
+
+  export async function userInputApi ({token}){
+    console.log(token);
+    const Response = await fetch(`${URL}user`, {
+     
+      method: "GET",
+      
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    
+      if (!Response.ok) {
+        if (Response.status === 500) {
+          throw new Error("Ошибка сервера");
+        }
+      }
+    
+      return Response;
+
+
+  }
+
