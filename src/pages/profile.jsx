@@ -3,6 +3,7 @@ import '../css/profile.css';
 import {Link, useNavigate} from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserInput } from '../store/thunks/thunk';
+import { postUserAvatarApi } from '../api';
 export const ProfilePage = ()  => {
 
     const token = useSelector((state)=> state.user.accessToken);
@@ -12,9 +13,10 @@ export const ProfilePage = ()  => {
     const userSurname = useSelector((state)=> state.user.userSurname);
     const userCity = useSelector((state)=> state.user.userCity);
     const userPhone = useSelector((state)=> state.user.userPhone);
+    const userAvatar = useSelector((state)=> state.user.userAvatar);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
+    const URL = "http://localhost:8090/";
     const [userData, setUserData] = useState({
         name: "",
         surname: "",
@@ -54,6 +56,19 @@ const handleInputChange = (e) =>{
       checkProfileChange();
 }
 
+// функция обновления аватарки пользователя
+const handleAvatarChange = (e) =>{
+    const {name, value} = e.target.files[0]; // Извлекаем имя поля и его значение
+    console.log(e.target);
+    console.log(e.target.files[0]);
+    setUserData({
+        ...userData, // Копируем текущие данные из состояния
+        [name]: value, // Обновляем нужное поле
+      });
+      
+      
+}
+
 // функция проверки изменения данных профиля
 const checkProfileChange = () =>{
     
@@ -68,10 +83,17 @@ if(userData.name !== userName){
         isChange: false, 
       });
 }
-
-
       
 }
+
+useEffect(() => {
+    
+    console.log(userData.avatar);
+    
+    postUserAvatarApi({token: token, file: userData.avatar})
+    
+  }, [userData]);
+
 
 
     return(
@@ -114,13 +136,32 @@ if(userData.name !== userName){
                                     <div className="settings__left">
                                         <div className="settings__img">
                                             <a href="/" target="_self">
-                                                <img src="#" alt=""/>
+                                                <img src="userAvatar" alt="avatar"/>
                                             </a>
                         
                                         </div>
-                                        <a className="settings__change-photo" href="/" target="_self">
+                                        {/* <a className="settings__change-photo" target="_self" >
                                             Заменить
-                                        </a>
+                                        </a> */}
+                                        <input
+                                        
+                                        className="input"
+                                        type="file"
+                                        name="avatar"
+                                        id="userPhoto"
+                                        hidden
+                                        onChange={handleAvatarChange}
+                                        />
+                                       <button >
+                                            <label
+                                            htmlFor="userPhoto"
+                                            className="settings__change-photo" target="_self"
+                                            >
+                                            Заменить
+                                            </label>
+                                       </button>
+                                         
+
                                     </div>
                                     <div className="settings__right">
                                         <form className="settings__form" action="#">

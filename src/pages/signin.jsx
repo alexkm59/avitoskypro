@@ -25,14 +25,17 @@ const [userLoginForm, setUserLoginForm] = useState({
 
 
 const checkBeforeIn = ()=>{
+    
+    if(token){
+        console.log(`положительная ветка входа`);
+        navigate("/profile");
+    }
+    
     if(loginError || loginErrorApi){
         console.log(`отрицательная ветка входа`);
         setLoginError(loginErrorApi);
-        
-    }else{
-        console.log(`положительная ветка входа`);
-    // navigate("/profile");
     }
+   
 
 }
 
@@ -101,7 +104,7 @@ const handleInputChange = (e) =>{
 // Сбрасываем ошибку если пользователь меняет данные на форме или меняется режим формы
 useEffect(() => {
     setLoginError(null);
-    // dispatch(userLoginFailure(""));
+    dispatch(userLoginFailure(""));
   }, [userLoginForm]);
 
  // Проверка на ошибку регистрации
@@ -109,6 +112,13 @@ useEffect(() => {
     setLoginError(loginErrorApi);
   
   }, [loginErrorApi]);
+
+  // Перенаправляем пользователя на страницу профиля при получении токена
+useEffect(() => {
+    if(token){
+        navigate("/profile");
+    }
+  }, [token]);
 
 
 return(

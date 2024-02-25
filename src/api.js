@@ -128,3 +128,32 @@ export async function userRegistration({email, password, name, surname, city}) {
 
   }
 
+ // загрузка аватарки пользователя
+ export async function postUserAvatarApi({token, file}) {
+  console.log(file);
+  const formData = new FormData();
+  formData.append("file", file);
+  console.log(formData);
+  const Response = await fetch(`${URL}user/avatar`, {
+  method: "POST",
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+
+  body: ({
+    file: formData,
+  
+  }),
+  
+})
+
+  if (!Response.ok) {
+    if (Response.status === 500) {
+      throw new Error("Ошибка сервера");
+    }
+  }
+
+  const data = await Response.json();
+  console.log(data);
+  return data;
+}

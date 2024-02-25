@@ -9,6 +9,7 @@ const initialState = {
   userСity:"",
   userSellsFrom:"",
   userPhone:"",
+  userAvatar:"",
   loading: false,
   error: null,
   accessToken:"",
@@ -77,6 +78,7 @@ export const userSlice = createSlice({
     state.userСity = user.city;
     state.userSellsFrom = user.sells_from;
     state.userPhone = user.phone;
+    state.userAvatar = user.avatar;
     state.loading = false;
   },
 
