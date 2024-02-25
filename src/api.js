@@ -140,10 +140,7 @@ export async function userRegistration({email, password, name, surname, city}) {
     Authorization: `Bearer ${token}`,
   },
 
-  body: ({
-    file: formData,
-  
-  }),
+  body: formData,
   
 })
 
