@@ -1,6 +1,7 @@
 import {
   getAlladvertis,
   getImages,
+  userDataChangeApi,
   userInputApi,
   userLoginApi,
   userRegistration,
@@ -28,6 +29,9 @@ import {
   userInputStart,
   userInputSuccess,
   userInputFailure,
+  userDataChangeStart,
+    userDataChangeSuccess,
+    userDataChangeFailure,
 } from "../slices/user";
 
 // import {activeAdsIdLoading} from "../slices/adsItem"
@@ -101,6 +105,7 @@ export const fetchUserLogin =
     }
   };
 
+
 export const fetchUserInput = ({token}) => async (dispatch, getState) => {
     dispatch(userInputStart());
 
@@ -120,3 +125,25 @@ export const fetchUserInput = ({token}) => async (dispatch, getState) => {
       dispatch(userInputFailure(error));
     }
   };
+
+
+  export const fetchUserDataChange = ({token, email, name, surname}) => async (dispatch, getState) => {
+    dispatch(userDataChangeStart());
+
+    try {
+      const Response = await userDataChangeApi({token, email, name, surname});
+
+      const data = await Response.json();
+      console.log(data);
+      console.log(Response);
+
+      if (!Response.ok) {
+        dispatch(userDataChangeFailure("Ошибка идентификации пользователя."));
+      } else {
+        dispatch(userDataChangeSuccess(data));
+      }
+    } catch (error) {
+      dispatch(userDataChangeFailure(error));
+    }
+  };
+

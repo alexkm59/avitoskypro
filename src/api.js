@@ -128,8 +128,38 @@ export async function userRegistration({email, password, name, surname, city}) {
 
   }
 
- // загрузка аватарки пользователя
- export async function postUserAvatarApi({token, file}) {
+ //  смена данных пользователя
+ export async function userDataChangeApi({token, email, name, surname}) {
+  
+  
+  const Response = await fetch(`${URL}user`, {
+  method: "PATCH",
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+
+  body: JSON.stringify({
+    email: email,
+    name: name,
+    surname: surname,
+    
+  }),
+  
+})
+
+  if (!Response.ok) {
+    if (Response.status === 500) {
+      throw new Error("Ошибка сервера");
+    }
+  }
+
+  const data = await Response.json();
+  console.log(data);
+  return data;
+}
+
+// загрузка аватарки пользователя
+export async function  postUserAvatarApi({token, file}) {
   console.log(file);
   const formData = new FormData();
   formData.append("file", file);
@@ -154,3 +184,6 @@ export async function userRegistration({email, password, name, surname, city}) {
   console.log(data);
   return data;
 }
+
+
+

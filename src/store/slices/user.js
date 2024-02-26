@@ -86,8 +86,29 @@ export const userSlice = createSlice({
     const error = action.payload;
     state.loading = false;
     state.error = error;
-    // state.error = error.detail[0].msg;
+    
   },
+
+// изменение данных пользователя
+userDataChangeStart: (state, action) => {
+  state.loading = true;
+},
+
+userDataChangeSuccess: (state, action) => {
+  const user = action.payload;
+  state.userEmail = user.email;
+  state.userName = user.name;
+  state.userSurname = user.surname;
+  state.loading = false;
+},
+
+userDataChangeFailure: (state, action) => {
+  const error = action.payload;
+  state.loading = false;
+  state.error = error;
+  
+},
+
 
   
   },
@@ -103,5 +124,9 @@ export const {
     userInputStart,
     userInputSuccess,
     userInputFailure,
+    userDataChangeStart,
+    userDataChangeSuccess,
+    userDataChangeFailure,
+
 } = userSlice.actions;
 export default userSlice.reducer;

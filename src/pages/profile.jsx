@@ -2,7 +2,7 @@ import {React, useEffect, useState} from 'react';
 import '../css/profile.css';
 import {Link, useNavigate} from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchUserInput } from '../store/thunks/thunk';
+import { fetchUserDataChange, fetchUserInput } from '../store/thunks/thunk';
 import { postUserAvatarApi } from '../api';
 export const ProfilePage = ()  => {
 
@@ -14,6 +14,7 @@ export const ProfilePage = ()  => {
     const userCity = useSelector((state)=> state.user.userCity);
     const userPhone = useSelector((state)=> state.user.userPhone);
     const userAvatar = useSelector((state)=> state.user.userAvatar);
+    const userEmail = useSelector((state)=> state.user.userEmail);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const URL = "http://localhost:8090/";
@@ -49,21 +50,23 @@ export const ProfilePage = ()  => {
 // функция обновления состояния данных пользователя
 const handleInputChange = (e) =>{
     const {name, value} = e.target; // Извлекаем имя поля и его значение
+    console.log(e.target.value);
+    console.log(name);
+    console.log(value);
     setUserData({
         ...userData, // Копируем текущие данные из состояния
         [name]: value, // Обновляем нужное поле
       });
+      console.log(userData.name);
       checkProfileChange();
 }
 
 // функция обновления аватарки пользователя
 const handleAvatarChange = (e) =>{
-    const {name, value} = e.target.files[0]; // Извлекаем имя поля и его значение
-    console.log(e.target);
-    console.log(e.target.files[0]);
+    
     setUserData({
         ...userData, // Копируем текущие данные из состояния
-        [name]: value, // Обновляем нужное поле
+        avatar: e.target.files[0], // Обновляем нужное поле
       });
       
       
@@ -75,7 +78,7 @@ const checkProfileChange = () =>{
 if(userData.name !== userName){
     setUserData({
         ...userData,
-        isChange: true, 
+        isChange: true,
       });
 }else{
     setUserData({
@@ -92,7 +95,26 @@ useEffect(() => {
     
     postUserAvatarApi({token: token, file: userData.avatar})
     
-  }, [userData]);
+  }, [userData.avatar]);
+
+ 
+const sendNewUserData = ()=>{
+    
+    let newName ="";
+    let newSurname =""; 
+    userData.name ? (newName = userData.name):(newName = userName);
+    userData.surname ? (newSurname = userData.surname):(newSurname = userSurname);
+    
+    console.log(userData.name);
+    console.log(userData.surname);
+
+    console.log(newName);
+    console.log(newSurname);
+
+    dispatch(fetchUserDataChange({token, email: userEmail, name: newName, surname: newSurname}))
+
+}
+
 
 
 
@@ -136,7 +158,7 @@ useEffect(() => {
                                     <div className="settings__left">
                                         <div className="settings__img">
                                             <a href="/" target="_self">
-                                                <img src="userAvatar" alt="avatar"/>
+                                                <img src={`${URL}`+`${userAvatar}`} alt="avatar"/>
                                             </a>
                         
                                         </div>
@@ -166,25 +188,25 @@ useEffect(() => {
                                     <div className="settings__right">
                                         <form className="settings__form" action="#">
                                             <div className="settings__div">
-                                                <label for="fname">Имя</label>
-                                                <input className="settings__f-name" id="settings-fname" name="name" type="text" defaultValue={`${userName}`} placeholder="" onChange={handleInputChange}></input>
+                                                <label htmlFor="fname">Имя</label>
+                                                <input className="settings__f-name" id="settings-fname" name="name" type="text" defaultValue={`${userName}`} placeholder="" onChange={(e)=>handleInputChange(e)}></input>
                                             </div>
                         
                                             <div className="settings__div">
-                                                <label for="lname">Фамилия</label>
+                                                <label htmlFor="lname">Фамилия</label>
                                                 <input className="settings__l-name" id="settings-lname" name=" surname" type="text" defaultValue={`${userSurname}`} placeholder="" onChange={handleInputChange}></input>
                                             </div>
                         
                                             <div className="settings__div">
-                                                <label for="city">Город</label>
+                                                <label htmlFor="city">Город</label>
                                                 <input className="settings__city" id="settings-city" name="city" type="text" defaultValue={`${userCity}`} placeholder=""/>
                                             </div>
                         
                                             <div className="settings__div">
-                                                <label for="phone">Телефон</label>
+                                                <label htmlFor="phone">Телефон</label>
                                                 <input className="settings__phone" id="settings-phone" name="phone" type="tel" defaultValue={`${userPhone}`} placeholder="+79161234567"/>
                                             </div>
-                                            {userData.isChange ? (<button className="settings__btn btn-hov02" id="settings-btn">Сохранить</button>):(<button className="settings__btn_notActive" disabled="true"  id="settings-btn">Сохранить</button>) }
+                                            {userData.isChange ? (<div className="settings__btn btn-hov02" id="settings-btn" onClick={()=>sendNewUserData()}>Сохранить</div>):(<button className="settings__btn_notActive" disabled="true"  id="settings-btn">Сохранить</button>) }
                                             
                                         </form>
                                     </div>
