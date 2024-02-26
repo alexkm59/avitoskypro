@@ -6,6 +6,7 @@ import { SignUpPage } from "./pages/signup";
 import { ProfilePage } from "./pages/profile";
 import { AdvPage } from "./pages/adv_page";
 import { SellerProfilePage } from "./pages/seller_profile";
+import { AddNewAdv } from "./pages/add_newadv";
 
 export const AppRoutes = () => {
   return (
@@ -16,6 +17,7 @@ export const AppRoutes = () => {
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/adv_page" element={<AdvPage />} />
       <Route path="/seller_profile" element={<SellerProfilePage />} />
+      <Route path="/add_new_adv" element={<AddNewAdv />} />
     </Routes>
   );
 };

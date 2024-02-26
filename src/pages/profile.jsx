@@ -129,7 +129,10 @@ const sendNewUserData = ()=>{
                             <img className="logo-mob__img" src="img/logo-mob.png" alt="logo"/>
                         </a>
                     </div>
-                    <button className="header__btn-putAd btn-hov01" id="btputAd">Разместить объявление</button>
+                    <Link to="/add_new_adv">
+                        <button className="header__btn-putAd btn-hov01" id="btputAd">Разместить объявление</button>
+                    </Link>
+                   
                     <button className="header__btn-lk btn-hov01" id="btnlk">Личный кабинет</button>
                 </nav>
             </header>
@@ -189,7 +192,7 @@ const sendNewUserData = ()=>{
                                         <form className="settings__form" action="#">
                                             <div className="settings__div">
                                                 <label htmlFor="fname">Имя</label>
-                                                <input className="settings__f-name" id="settings-fname" name="name" type="text" defaultValue={`${userName}`} placeholder="" onChange={(e)=>handleInputChange(e)}></input>
+                                                <input className="settings__f-name" id="settings-fname" name="name" type="text" defaultValue={`${userName}`} placeholder="" onChange={handleInputChange}></input>
                                             </div>
                         
                                             <div className="settings__div">
@@ -240,95 +243,15 @@ const sendNewUserData = ()=>{
                                 </div>
                             </div>
 
-                            <div className="cards__item">
-                                <div className="cards__card card">
-                                    <div className="card__image">
-                                        <a href="/" target="_blank">
-                                            {/* <img src="#" alt="picture"/> */}
-                                        </a>
-                                    </div>
-                                    <div className="card__content">
-                                        <a href="/" target="_blank">
-                                            <h3 className="card__title">Ракетка для большого тенниса Triumph Pro ST</h3>
-                                        </a>
-                                        <p className="card__price">2&nbsp;200&nbsp;₽</p>
-                                        <p className="card__place">Санкт Петербург</p>
-                                        <p className="card__date">Сегодня в&nbsp;10:45</p>
-                                    </div>
-                                </div>
-                            </div>
+                            
 
-                            <div className="cards__item">
-                                <div className="cards__card card">
-                                    <div className="card__image">
-                                        <a href="/" target="_blank">
-                                            {/* <img src="#" alt="picture"/> */}
-                                        </a>
-                                    </div>
-                                    <div className="card__content">
-                                        <a href="/" target="_blank">
-                                            <h3 className="card__title">Ракетка для большого тенниса Triumph Pro ST</h3>
-                                        </a>
-                                        <p className="card__price">2&nbsp;200&nbsp;₽</p>
-                                        <p className="card__place">Санкт Петербург</p>
-                                        <p className="card__date">Сегодня в&nbsp;10:45</p>
-                                    </div>
-                                </div>
-                            </div>
+                           
 
-                            <div className="cards__item">
-                                <div className="cards__card card">
-                                    <div className="card__image">
-                                        <a href="/" target="_blank">
-                                            {/* <img src="#" alt="picture"/> */}
-                                        </a>
-                                    </div>
-                                    <div className="card__content">
-                                        <a href="/" target="_blank">
-                                            <h3 className="card__title">Ракетка для большого тенниса Triumph Pro ST</h3>
-                                        </a>
-                                        <p className="card__price">2&nbsp;200&nbsp;₽</p>
-                                        <p className="card__place">Санкт Петербург</p>
-                                        <p className="card__date">Сегодня в&nbsp;10:45</p>
-                                    </div>
-                                </div>
-                            </div>
+                          
 
-                            <div className="cards__item">
-                                <div className="cards__card card">
-                                    <div className="card__image">
-                                        <a href="/" target="_blank">
-                                            {/* <img src="" alt="picture"/> */}
-                                        </a>
-                                    </div>
-                                    <div className="card__content">
-                                        <a href="/" target="_blank">
-                                            <h3 className="card__title">Ракетка для большого тенниса Triumph Pro ST</h3>
-                                        </a>
-                                        <p className="card__price">2&nbsp;200&nbsp;₽</p>
-                                        <p className="card__place">Санкт Петербург</p>
-                                        <p className="card__date">Сегодня в&nbsp;10:45</p>
-                                    </div>
-                                </div>
-                            </div>
+                           
 
-                            <div className="cards__item">
-                                <div className="cards__card card">
-                                    <div className="card__image">
-                                        <a href="/" target="_blank">
-                                            {/* <img src="#" alt="picture"/> */}
-                                        </a>
-                                    </div>
-                                    <div className="card__content">
-                                        <a href="/" target="_blank">
-                                            <h3 className="card__title">Ракетка для большого тенниса Triumph Pro ST</h3>
-                                        </a>
-                                        <p className="card__price">2&nbsp;200&nbsp;₽</p>
-                                        <p className="card__place">Санкт Петербург</p>
-                                        <p className="card__date">Сегодня в&nbsp;10:45</p>
-                                    </div>
-                                </div>
-                            </div>                 
+                                           
 
 
                         </div>                        

@@ -136,6 +136,7 @@ export async function userRegistration({email, password, name, surname, city}) {
   method: "PATCH",
   headers: {
     Authorization: `Bearer ${token}`,
+    
   },
 
   body: JSON.stringify({
@@ -183,6 +184,37 @@ export async function  postUserAvatarApi({token, file}) {
   const data = await Response.json();
   console.log(data);
   return data;
+}
+
+// создание сообщения без фотографий
+
+export async function postNewAdsTextOnly({token, title, description, price}){
+  const Response = await fetch(`${URL}adstext`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "content-type": "application/json",
+    },
+  
+    body: JSON.stringify({
+      title: title,
+      description: description,
+      price: price,
+      
+    }),
+    
+  })
+  
+    if (!Response.ok) {
+      if (Response.status === 500) {
+        throw new Error("Ошибка сервера");
+      }
+    }
+  
+    const data = await Response.json();
+    console.log(data);
+    return data;
+
 }
 
 

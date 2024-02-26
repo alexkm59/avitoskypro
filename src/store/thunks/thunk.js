@@ -1,6 +1,7 @@
 import {
   getAlladvertis,
   getImages,
+  postNewAdsTextOnly,
   userDataChangeApi,
   userInputApi,
   userLoginApi,
@@ -11,6 +12,9 @@ import {
   allAdsLoadingSuccess,
   allAdsLoadingFailure,
   activeAdsIdLoading,
+  addAdsTextOnlyStart,
+  addAdsTextOnlySuccess,
+  addAdsTextOnlyFailure,
 } from "../slices/ads";
 
 import {
@@ -147,3 +151,16 @@ export const fetchUserInput = ({token}) => async (dispatch, getState) => {
     }
   };
 
+  export const fetchNewAdvTextOnly = ({token, title, description, price}) => async (dispatch, getState) => {
+    dispatch(addAdsTextOnlyStart());
+  
+    try {
+      const data = await postNewAdsTextOnly({token, title, description, price});
+      dispatch(addAdsTextOnlySuccess(data));
+    } catch (error) {
+      dispatch(addAdsTextOnlyFailure(error));
+    }
+  };
+
+
+  

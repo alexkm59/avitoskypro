@@ -32,6 +32,24 @@ export const adsSlice = createSlice({
     activeAdsIdLoading: (state, action) => {
       state.activeAdsId = action.payload;
     },
+
+    addAdsTextOnlyStart: (state, action) => {
+      state.loading = true;
+    },
+
+    addAdsTextOnlySuccess: (state, action) => {
+      const newAds = action.payload;
+      state.loading = false;
+      state.error = null;
+      console.log(newAds);
+    },
+
+    addAdsTextOnlyFailure: (state, action) => {
+      const error = action.payload;
+      state.loading = false;
+      state.error = error;
+    },
+
   
   
   },
@@ -42,5 +60,8 @@ export const {
   allAdsLoadingSuccess,
   allAdsLoadingFailure,
   activeAdsIdLoading,
+  addAdsTextOnlyStart,
+  addAdsTextOnlySuccess,
+  addAdsTextOnlyFailure,
 } = adsSlice.actions;
 export default adsSlice.reducer;
