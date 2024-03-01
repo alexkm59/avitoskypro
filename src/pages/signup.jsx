@@ -12,7 +12,7 @@ export const SignUpPage = ()  => {
         confirmPassword:"",
         userName: "",
         userSurname: "",
-        userСity:"",
+        userCity:"",
     });
 
 
@@ -51,7 +51,7 @@ const userRegistration = ()=>{
     
 // после проверки вызвать диспатч регистрации пользователя
   
-dispatch(fetchUserRegistration({email: userData.userEmail, password: userData.userPassword, name: userData.userName, surname: userData.userSurname, city: userData.userСity}))
+dispatch(fetchUserRegistration({email: userData.userEmail, password: userData.userPassword, name: userData.userName, surname: userData.userSurname, city: userData.userCity}))
 .then(()=>{if(!registrationAPIError){
     console.log(registrationAPIError);
     navigate("/login");
@@ -97,7 +97,7 @@ dispatch(fetchUserRegistration({email: userData.userEmail, password: userData.us
                     <div className="modal__error">{registrationError ? registrationError : null}</div>
                     
                     <div className="modal__btn-signup-ent" >
-                    {isLoading ?(<a>Регистрация...</a> ):(<a onClick={()=> userRegistration()}>Зарегистрироваться</a>)}  
+                    {isLoading ?(<a> Регистрация...</a> ):(<a onClick={()=> userRegistration()}>Зарегистрироваться</a>)}  
                         
 
                     </div>

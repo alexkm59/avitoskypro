@@ -6,6 +6,7 @@ import { fetchAds, fetchAllImages } from "../store/thunks/thunk";
 import { monthTransform } from "../components/date_transform";
 import { PhotoBar } from "../components/photo_bar";
 import {TimeTransform} from "../components/time_transform";
+import { getAllCommentsApi } from "../api";
 
 
 export const AdvPage = () => {
@@ -13,6 +14,7 @@ export const AdvPage = () => {
     const allAds = useSelector((state) => state.ads.allAds);
     const activeAdsId = useSelector((state) => state.ads.activeAdsId);
     const allImages = useSelector((state) => state.images.allImages);
+    const [numberOfAdv, setNumberOfAdv] = useState("");
     let activeAds = null;
     let sellsFromMonth;
     let sellsFromYear;
@@ -24,10 +26,21 @@ export const AdvPage = () => {
          activeAds = allAds.find(function (item) {
             return item.id === idToLookFor;
         });
-        sellsFromMonth = monthTransform(activeAds.user.sells_from);
-        sellsFromYear = activeAds.user.sells_from.slice(0,4);
-    
+        console.log(activeAds);
+        sellsFromMonth = monthTransform(activeAds.user?.sells_from);
+        sellsFromYear = activeAds.user?.sells_from.slice(0,4);
     }
+
+
+// получаем все комментарии к объявлению для подсчета
+useEffect(() => {
+    getAllCommentsApi({ id: activeAdsId }).then((res) => {
+      console.log(res);
+      console.log(res.length);
+      setNumberOfAdv(res.length);
+    });
+  }, []);
+
 
 //    Переключение просмотра телефона
 
@@ -61,7 +74,13 @@ let imgArr = [];
 
   }
 
+  const linkToSellerPage =() =>{
+
+    
+  }
   
+
+
 
   let dateTime = TimeTransform(activeAds.created_on);
 
@@ -132,13 +151,15 @@ return(
                                     <h3 className="article__title title">{activeAds.title}</h3>
                                     <div className="article__info">
                                         <p className="article__date">{dateTime}</p>
-                                        <p className="article__city">{activeAds.user.city}</p>
-                                        <a className="article__link" href="" target="_blank" rel="">23 отзыва</a>
+                                        <p className="article__city">{activeAds.user?.city}</p>
+                                    <Link to="/adv_page/reviews">   
+                                        <a className="article__link" href="" target="_blank" rel="">{numberOfAdv} отзыва</a>
+                                    </Link> 
                                     </div>
                                     <p className="article__price">{activeAds.price} ₽</p>
                                     {isTelShow ? (<button className="article__btn btn-hov02" onClick={()=>toggleTelShow()}>
                                         
-                                        <span>{activeAds.user.phone}</span>
+                                        <span>{activeAds.user?.phone}</span>
                                     
                                     </button>):(<button className="article__btn btn-hov02" onClick={()=>toggleTelShow()}>
                                         Показать&nbsp;телефон 
@@ -152,7 +173,7 @@ return(
                                         </div>
                                         <div className="author__cont">
                                         <Link to='/seller_profile'>
-                                            <a className="author__name">{activeAds.user.name}</a>
+                                            <a className="author__name" onClick={()=>linkToSellerPage()}>{activeAds.user?.name}</a>
                                         </Link>
                                             
 

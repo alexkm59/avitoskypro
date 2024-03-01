@@ -1,6 +1,7 @@
 import {
   getAlladvertis,
   getImages,
+  postNewAds,
   postNewAdsTextOnly,
   userDataChangeApi,
   userInputApi,
@@ -15,6 +16,9 @@ import {
   addAdsTextOnlyStart,
   addAdsTextOnlySuccess,
   addAdsTextOnlyFailure,
+  addAdsStart,
+  addAdsSuccess,
+  addAdsFailure,
 } from "../slices/ads";
 
 import {
@@ -131,21 +135,21 @@ export const fetchUserInput = ({token}) => async (dispatch, getState) => {
   };
 
 
-  export const fetchUserDataChange = ({token, email, name, surname}) => async (dispatch, getState) => {
+  export const fetchUserDataChange = ({token, email, name, surname, city}) => async (dispatch, getState) => {
     dispatch(userDataChangeStart());
 
     try {
-      const Response = await userDataChangeApi({token, email, name, surname});
+      const Response = await userDataChangeApi({token, email, name, surname, city});
 
       const data = await Response.json();
       console.log(data);
       console.log(Response);
 
-      if (!Response.ok) {
-        dispatch(userDataChangeFailure("Ошибка идентификации пользователя."));
-      } else {
+      // if (!Response.ok) {
+      //   dispatch(userDataChangeFailure("Ошибка идентификации пользователя."));
+      // } else {
         dispatch(userDataChangeSuccess(data));
-      }
+      // }
     } catch (error) {
       dispatch(userDataChangeFailure(error));
     }
@@ -157,10 +161,23 @@ export const fetchUserInput = ({token}) => async (dispatch, getState) => {
     try {
       const data = await postNewAdsTextOnly({token, title, description, price});
       dispatch(addAdsTextOnlySuccess(data));
+      
     } catch (error) {
       dispatch(addAdsTextOnlyFailure(error));
     }
   };
 
+  export const fetchNewAdv = ({token, title, description, price}) => async (dispatch, getState) => {
+    dispatch(addAdsStart());
+  
+    try {
+      const data = await postNewAds({token, title, description, price});
+      dispatch(addAdsSuccess(data));
+    } catch (error) {
+      dispatch(addAdsFailure(error));
+    }
+  };
 
+
+  
   

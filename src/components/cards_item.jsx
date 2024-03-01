@@ -3,7 +3,7 @@ import "../css/main.css";
 import { getImagesById } from "../api";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getActiveAdsId } from "../store/thunks/thunk";
+import { fetchAllImages, getActiveAdsId } from "../store/thunks/thunk";
 import { TimeTransform } from "./time_transform";
 
 
@@ -18,7 +18,9 @@ export const CardsItem = ({ id, title, price, city, time, imagesId }) => {
     dispatch(getActiveAdsId(id));
   };
 
+
   if (imagesId) {
+    console.log(allImages);
     let idToLookFor = imagesId;
     let foundObject = allImages.find(function (item) {
       return item.id === idToLookFor;

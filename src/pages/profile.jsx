@@ -2,8 +2,9 @@ import {React, useEffect, useState} from 'react';
 import '../css/profile.css';
 import {Link, useNavigate} from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchUserDataChange, fetchUserInput } from '../store/thunks/thunk';
-import { postUserAvatarApi } from '../api';
+import { fetchAds, fetchAllImages, fetchUserDataChange, fetchUserInput } from '../store/thunks/thunk';
+import { getUserAds, postUserAvatarApi } from '../api';
+import { CardsItem } from '../components/cards_item';
 export const ProfilePage = ()  => {
 
     const token = useSelector((state)=> state.user.accessToken);
@@ -27,15 +28,26 @@ export const ProfilePage = ()  => {
         isChange: false,
     });
 
-
-   useEffect(() => {
-    
-        dispatch(fetchUserInput({token}))
-        
-        
+    const [userAdv, setUserAdv] = useState([]);
+// получаем все картинки и записываем в СТОР
+    useEffect(() => {
+        dispatch(fetchAds());
+        dispatch(fetchAllImages());
       }, []);
 
-    
+
+   useEffect(() => {
+        dispatch(fetchUserInput({token}))
+      }, [userData]);
+
+    //   Получаем объявления пользователя
+      useEffect(() => {
+         getUserAds({token}).then((meAdv)=>setUserAdv(meAdv)).then(console.log(userAdv));
+         console.log(userAdv);
+      }, []);
+      
+      
+      
 
 // Перенаправляем пользователя на страницу логирования если нет токена
 // useEffect(() => {
@@ -55,10 +67,11 @@ const handleInputChange = (e) =>{
     console.log(value);
     setUserData({
         ...userData, // Копируем текущие данные из состояния
-        [name]: value, // Обновляем нужное поле
+        [name]: value,
+        isChange: true,
       });
       console.log(userData.name);
-      checkProfileChange();
+    
 }
 
 // функция обновления аватарки пользователя
@@ -67,51 +80,39 @@ const handleAvatarChange = (e) =>{
     setUserData({
         ...userData, // Копируем текущие данные из состояния
         avatar: e.target.files[0], // Обновляем нужное поле
-      });
-      
-      
+      }); 
 }
 
-// функция проверки изменения данных профиля
-const checkProfileChange = () =>{
-    
-if(userData.name !== userName){
-    setUserData({
-        ...userData,
-        isChange: true,
-      });
-}else{
-    setUserData({
-        ...userData, 
-        isChange: false, 
-      });
-}
-      
-}
+
 
 useEffect(() => {
-    
     console.log(userData.avatar);
-    
     postUserAvatarApi({token: token, file: userData.avatar})
-    
   }, [userData.avatar]);
 
  
 const sendNewUserData = ()=>{
     
     let newName ="";
-    let newSurname =""; 
+    let newSurname ="";
+    let newCity ="";
     userData.name ? (newName = userData.name):(newName = userName);
     userData.surname ? (newSurname = userData.surname):(newSurname = userSurname);
+    userData.city ? (newCity = userData.city) : (newCity = userCity);
     
     console.log(userData.name);
     console.log(userData.surname);
-
+console.log(userEmail);
     console.log(newName);
     console.log(newSurname);
 
-    dispatch(fetchUserDataChange({token, email: userEmail, name: newName, surname: newSurname}))
+    dispatch(fetchUserDataChange({token, email: userEmail, name: newName, surname: newSurname, city: newCity}));
+    setUserData({
+        ...userData,
+        isChange: false,
+      });
+
+    
 
 }
 
@@ -144,7 +145,7 @@ const sendNewUserData = ()=>{
                             <a className="menu__logo-link" href="/" target="_blank">
                                 <img className="menu__logo-img" src="img/logo.png" alt="logo"/>
                             </a>
-                            <form className="menu__form" action="#">
+                            <form className="menu__form">
                             <Link to="/">
                                 <button className="menu__btn btn-hov02" id="btnGoBack">Вернуться на&nbsp;главную</button>
                                 </Link>
@@ -197,12 +198,12 @@ const sendNewUserData = ()=>{
                         
                                             <div className="settings__div">
                                                 <label htmlFor="lname">Фамилия</label>
-                                                <input className="settings__l-name" id="settings-lname" name=" surname" type="text" defaultValue={`${userSurname}`} placeholder="" onChange={handleInputChange}></input>
+                                                <input className="settings__l-name" id="settings-lname" name="surname" type="text" defaultValue={`${userSurname}`} placeholder="" onChange={handleInputChange}></input>
                                             </div>
                         
                                             <div className="settings__div">
                                                 <label htmlFor="city">Город</label>
-                                                <input className="settings__city" id="settings-city" name="city" type="text" defaultValue={`${userCity}`} placeholder=""/>
+                                                <input className="settings__city" id="settings-city" name="city" type="text" defaultValue={`${userCity}` } placeholder="" onChange={handleInputChange}/>
                                             </div>
                         
                                             <div className="settings__div">
@@ -224,13 +225,32 @@ const sendNewUserData = ()=>{
                     <div className="main__content">
                         
                         <div className="content__cards cards">                            
+{/* Вызов компонента отрисовки объявлений */}
 
-                            <div className="cards__item">
+{userAdv.map((oneAds) => {
+       
+       console.log(oneAds);
+                    
+                    return (
+                      <CardsItem
+                        id={oneAds.id}
+                        title={oneAds.title}
+                        price={oneAds.price}
+                        city={oneAds.user.city}
+                        time={oneAds.created_on}
+                        imagesId={oneAds?.images[0]?.id}
+                      />
+                    );
+                  })}
+
+
+
+                            {/* <div className="cards__item">
                                 <div className="cards__card card">
                                     <div className="card__image">
-                                        <a href="/" target="_blank">
+                                        <a href="/" target="_blank"> */}
                                             {/* <img src="#" alt="picture"/> */}
-                                        </a>
+                                        {/* </a>
                                     </div>
                                     <div className="card__content">
                                         <a href="/" target="_blank">
@@ -241,19 +261,9 @@ const sendNewUserData = ()=>{
                                         <p className="card__date">Сегодня в&nbsp;10:45</p>
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
 
-                            
-
-                           
-
-                          
-
-                           
-
-                                           
-
-
+ 
                         </div>                        
                     </div>
                     

@@ -1,11 +1,47 @@
 import { React, useEffect, useState } from "react";
-import "../css/article.css";
+import "../css/sellerProfile.css";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { monthTransform } from "../components/date_transform";
+import { CardsItem } from "../components/cards_item";
 
 export const SellerProfilePage = ()  => {
+    const activeAdsId = useSelector((state) => state.ads.activeAdsId);
+    const allAds = useSelector((state) => state.ads.allAds);
+    const [isTelShow, setIsTelShow] = useState(false);
+    let activeAds = null;
+    let sellsFromMonth;
+    let sellsFromYear;
+ // поиск выбранного объявления activeAds по ID
+ if (activeAdsId) {
+    let idToLookFor = activeAdsId;
+     activeAds = allAds.find(function (item) {
+        return item.id === idToLookFor;
+    });
+    console.log(activeAds);
+    sellsFromMonth = monthTransform(activeAds.user?.sells_from);
+    sellsFromYear = activeAds.user?.sells_from.slice(0,4);
+}
 
+//    Переключение просмотра телефона
 
+const toggleTelShow = () =>{
+    !isTelShow ? setIsTelShow(true) : setIsTelShow(false);
+}
+
+// определяем id sellerа и находим его объявления
+let sellerAds = [];
+if (activeAds) {
+    
+const sellerID = activeAds.user.id;
+console.log(sellerID);
+
+    sellerAds = allAds.filter(function (item) {
+        return item.user.id === sellerID;
+     });
+
+console.log(sellerAds);
+    }
 
 return(
 
@@ -32,7 +68,9 @@ return(
                                 <img className="menu__logo-img" src="img/logo.png" alt="logo"/>
                             </a>
                             <form className="menu__form" action="#">
+                            <Link to="/">
                                 <button className="menu__btn btn-hov02" id="btnGoBack">Вернуться на&nbsp;главную</button>
+                                </Link>
                             </form>
                         
                         </div>
@@ -52,9 +90,9 @@ return(
                                         </div>
                                     </div>
                                     <div className="seller__right">
-                                        <h3 className="seller__title">Кирилл Матвеев</h3>
-                                        <p className="seller__city">Санкт-Петербург</p>
-                                        <p className="seller__inf">Продает товары с августа 2021</p>
+                                        <h3 className="seller__title">{activeAds.user.name}</h3>
+                                        <p className="seller__city">{activeAds.user.city}</p>
+                                        <p className="seller__inf">Продает товары с {sellsFromMonth} {sellsFromYear}</p>
                         
                                         <div className="seller__img-mob-block">
                                             <div className="seller__img-mob">
@@ -64,9 +102,21 @@ return(
                                             </div>
                                         </div>
                         
-                                        <button className="seller__btn btn-hov02">Показать&nbsp;телефон
+                                        {/* <button className="seller__btn btn-hov02">Показать&nbsp;телефон
                                             <span>8&nbsp;905&nbsp;ХХХ&nbsp;ХХ&nbsp;ХХ</span>
-                                        </button>
+                                        </button> */}
+                                        
+                                        {isTelShow ? (<button className="seller__btn btn-hov02" onClick={()=>toggleTelShow()}>
+                                        
+                                        <span>{activeAds.user?.phone}</span>
+                                    
+                                    </button>):(<button className="seller__btn btn-hov02" onClick={()=>toggleTelShow()}>
+                                        Показать&nbsp;телефон 
+                                        <span>8&nbsp;905&nbsp;ХХХ&nbsp;ХХ&nbsp;ХХ</span>
+                                    
+                                    </button>)}
+
+
                                     </div>
                                 </div>
                             </div>
@@ -80,114 +130,23 @@ return(
                         
                         <div className="content__cards cards">                            
 
-                            <div className="cards__item">
-                                <div className="cards__card card">
-                                    <div className="card__image">
-                                        <a href="" target="_blank">
-                                            <img src="#" alt="picture"/>
-                                        </a>
-                                    </div>
-                                    <div className="card__content">
-                                        <a href="" target="_blank">
-                                            <h3 className="card__title">Ракетка для большого тенниса Triumph Pro ST</h3>
-                                        </a>
-                                        <p className="card__price">2&nbsp;200&nbsp;₽</p>
-                                        <p className="card__place">Санкт Петербург</p>
-                                        <p className="card__date">Сегодня в&nbsp;10:45</p>
-                                    </div>
-                                </div>
-                            </div>
+                    {/* Вызов компонента отрисовки объявлений */}
 
-                            <div className="cards__item">
-                                <div className="cards__card card">
-                                    <div className="card__image">
-                                        <a href="" target="_blank">
-                                            <img src="#" alt="picture"/>
-                                        </a>
-                                    </div>
-                                    <div className="card__content">
-                                        <a href="" target="_blank">
-                                            <h3 className="card__title">Ракетка для большого тенниса Triumph Pro ST</h3>
-                                        </a>
-                                        <p className="card__price">2&nbsp;200&nbsp;₽</p>
-                                        <p className="card__place">Санкт Петербург</p>
-                                        <p className="card__date">Сегодня в&nbsp;10:45</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="cards__item">
-                                <div className="cards__card card">
-                                    <div className="card__image">
-                                        <a href="" target="_blank">
-                                            <img src="#" alt="picture"/>
-                                        </a>
-                                    </div>
-                                    <div className="card__content">
-                                        <a href="" target="_blank">
-                                            <h3 className="card__title">Ракетка для большого тенниса Triumph Pro ST</h3>
-                                        </a>
-                                        <p className="card__price">2&nbsp;200&nbsp;₽</p>
-                                        <p className="card__place">Санкт Петербург</p>
-                                        <p className="card__date">Сегодня в&nbsp;10:45</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="cards__item">
-                                <div className="cards__card card">
-                                    <div className="card__image">
-                                        <a href="" target="_blank">
-                                            <img src="#" alt="picture"/>
-                                        </a>
-                                    </div>
-                                    <div className="card__content">
-                                        <a href="" target="_blank">
-                                            <h3 className="card__title">Ракетка для большого тенниса Triumph Pro ST</h3>
-                                        </a>
-                                        <p className="card__price">2&nbsp;200&nbsp;₽</p>
-                                        <p className="card__place">Санкт Петербург</p>
-                                        <p className="card__date">Сегодня в&nbsp;10:45</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="cards__item">
-                                <div className="cards__card card">
-                                    <div className="card__image">
-                                        <a href="" target="_blank">
-                                            <img src="#" alt="picture"/>
-                                        </a>
-                                    </div>
-                                    <div className="card__content">
-                                        <a href="" target="_blank">
-                                            <h3 className="card__title">Ракетка для большого тенниса Triumph Pro ST</h3>
-                                        </a>
-                                        <p className="card__price">2&nbsp;200&nbsp;₽</p>
-                                        <p className="card__place">Санкт Петербург</p>
-                                        <p className="card__date">Сегодня в&nbsp;10:45</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="cards__item">
-                                <div className="cards__card card">
-                                    <div className="card__image">
-                                        <a href="" target="_blank">
-                                            <img src="#" alt="picture"/>
-                                        </a>
-                                    </div>
-                                    <div className="card__content">
-                                        <a href="" target="_blank">
-                                            <h3 className="card__title">Ракетка для большого тенниса Triumph Pro ST</h3>
-                                        </a>
-                                        <p className="card__price">2&nbsp;200&nbsp;₽</p>
-                                        <p className="card__place">Санкт Петербург</p>
-                                        <p className="card__date">Сегодня в&nbsp;10:45</p>
-                                    </div>
-                                </div>
-                            </div>                 
-
+                     {sellerAds.map((oneAds) => {
+                        
+                        console.log(oneAds);
+                                        
+                                        return (
+                                        <CardsItem
+                                            id={oneAds.id}
+                                            title={oneAds.title}
+                                            price={oneAds.price}
+                                            city={oneAds.user.city}
+                                            time={oneAds.created_on}
+                                            imagesId={oneAds?.images[0]?.id}
+                                        />
+                                        );
+                                    })} 
 
                         </div>                        
                     </div>

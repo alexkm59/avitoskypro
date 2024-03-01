@@ -6,10 +6,10 @@ const initialState = {
   userPassword: "",
   userName: "",
   userSurname: "",
-  userСity:"",
-  userSellsFrom:"",
-  userPhone:"",
-  userAvatar:"",
+  userCity: "",
+  userSellsFrom: "",
+  userPhone: "",
+  userAvatar: "",
   loading: false,
   error: null,
   accessToken:"",
@@ -29,7 +29,6 @@ export const userSlice = createSlice({
       const user = action.payload;
       state.userId = user.id;
       state.userEmail = user.email;
-      // state.userPassword = userData;
       state.userName = user.name;
       state.userSurname = user.surname;
       state.userСity = user.city;
@@ -75,7 +74,7 @@ export const userSlice = createSlice({
     state.userEmail = user.email;
     state.userName = user.name;
     state.userSurname = user.surname;
-    state.userСity = user.city;
+    state.userCity = user.city;
     state.userSellsFrom = user.sells_from;
     state.userPhone = user.phone;
     state.userAvatar = user.avatar;

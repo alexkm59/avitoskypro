@@ -129,23 +129,26 @@ export async function userRegistration({email, password, name, surname, city}) {
   }
 
  //  смена данных пользователя
- export async function userDataChangeApi({token, email, name, surname}) {
+ export async function userDataChangeApi({token, email, name, surname, city}) {
   
-  
+console.log(email);
+console.log(name);
+console.log(surname);
+console.log(city);
   const Response = await fetch(`${URL}user`, {
   method: "PATCH",
-  headers: {
-    Authorization: `Bearer ${token}`,
-    
-  },
 
   body: JSON.stringify({
     email: email,
     name: name,
     surname: surname,
-    
+    city: city,
   }),
-  
+  headers: {
+    Authorization: `Bearer ${token}`,
+    "content-type": "application/json",
+  },
+
 })
 
   if (!Response.ok) {
@@ -217,5 +220,130 @@ export async function postNewAdsTextOnly({token, title, description, price}){
 
 }
 
+// создание сообщения c фотографиями
 
+export async function postNewAds({token, title, files, description, price}){
+  const Response = await fetch(`${URL}ads`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  
+    body: JSON.stringify({
+      title: title,
+      description: description,
+      price: price,
+    }),
+   
+    
+  })
+  
+    if (!Response.ok) {
+      if (Response.status === 500) {
+        throw new Error("Ошибка сервера");
+      }
+    }
+  
+    const data = await Response.json();
+    console.log(data);
+    return data;
 
+}
+
+// Получение всех объявлений пользователя
+
+export async function getUserAds({token}){
+  const Response = await fetch(`${URL}ads/me`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  
+       
+  })
+  
+    if (!Response.ok) {
+      if (Response.status === 500) {
+        throw new Error("Ошибка сервера");
+      }
+    }
+  
+    const data = await Response.json();
+    console.log(data);
+    return data;
+
+}
+
+// Добавление комментария
+
+export async function postCommentApi({token, id, text}){
+  console.log(token);
+  console.log(id);
+  const Response = await fetch(`${URL}ads/${id}/comments`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({
+      text: text,
+      
+    }),
+       
+  })
+  
+    if (!Response.ok) {
+      if (Response.status === 500) {
+        throw new Error("Ошибка сервера");
+      }
+    }
+  
+    const data = await Response.json();
+    console.log(data);
+    return data;
+
+}
+
+// Получение всех комментариев по id объявления
+export async function getAllCommentsApi({id}){
+  const Response = await fetch(`${URL}ads/${id}/comments`, {
+    method: "GET",   
+  })
+    if (!Response.ok) {
+      if (Response.status === 500) {
+        throw new Error("Ошибка сервера");
+      }
+    }
+    const data = await Response.json();
+    console.log(data);
+    return data;
+}
+
+// Загрузка картинки в объявление
+export async function postImageToAdsApi({token, id, file}){
+  console.log(token);
+  console.log(id);
+  console.log(file);
+  
+  const formData = new FormData();
+  formData.append("file", file);
+  
+  console.log(formData);
+  const Response = await fetch(`${URL}ads/${id}/image`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+      
+    
+  })
+    if (!Response.ok) {
+      if (Response.status === 500) {
+        throw new Error("Ошибка сервера");
+      }
+    }
+    const data = await Response.json();
+    console.log(data);
+    return data;
+}

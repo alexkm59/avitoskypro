@@ -340,6 +340,9 @@ a {
   background-color: #009EE4;
   border-radius: 6px;
   border: 1px solid #009EE4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .settings__btn_notActive {

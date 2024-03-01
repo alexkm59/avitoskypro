@@ -50,6 +50,23 @@ export const adsSlice = createSlice({
       state.error = error;
     },
 
+
+    addAdsStart: (state, action) => {
+      state.loading = true;
+    },
+
+    addAdsSuccess: (state, action) => {
+      const newAds = action.payload;
+      state.loading = false;
+      state.error = null;
+      console.log(newAds);
+    },
+
+    addAdsFailure: (state, action) => {
+      const error = action.payload;
+      state.loading = false;
+      state.error = error;
+    },
   
   
   },
@@ -63,5 +80,8 @@ export const {
   addAdsTextOnlyStart,
   addAdsTextOnlySuccess,
   addAdsTextOnlyFailure,
+  addAdsStart,
+  addAdsSuccess,
+  addAdsFailure,
 } = adsSlice.actions;
 export default adsSlice.reducer;
