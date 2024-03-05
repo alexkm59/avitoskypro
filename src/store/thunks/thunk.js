@@ -3,6 +3,7 @@ import {
   getImages,
   postNewAds,
   postNewAdsTextOnly,
+  refreshTokensApi,
   userDataChangeApi,
   userInputApi,
   userLoginApi,
@@ -40,6 +41,7 @@ import {
   userDataChangeStart,
     userDataChangeSuccess,
     userDataChangeFailure,
+    userTokenRefresh,
 } from "../slices/user";
 
 // import {activeAdsIdLoading} from "../slices/adsItem"
@@ -178,6 +180,13 @@ export const fetchUserInput = ({token}) => async (dispatch, getState) => {
     }
   };
 
+
+  export const userTokensRefresh = ({accessToken, refreshToken}) => async (dispatch, getState) => {
+    
+      const data = await refreshTokensApi({accessToken, refreshToken});
+      dispatch(userTokenRefresh(data));
+    
+  };
 
   
   

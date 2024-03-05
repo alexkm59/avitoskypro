@@ -1,6 +1,6 @@
 import { React, useEffect, useRef, useState } from "react";
 import "../css/reviews.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCommentsApi, postCommentApi } from "../api";
 import { UsersComments } from "../components/coments";
@@ -10,6 +10,7 @@ export const ReviewsPage = () => {
   const token = useSelector((state) => state.user.accessToken);
   const [formInputError, setFormInputError] = useState(null);
   const userInputRef = useRef();
+  const navigate = useNavigate();
   const [comments, setComments] = useState([
     {
       id: "",
@@ -121,7 +122,7 @@ useEffect(() => {
           <div className="modal__content">
             <h3 className="modal__title">Отзывы о товаре</h3>
             <div className="modal__btn-close">
-              <div className="modal__btn-close-line"></div>
+              <div className="modal__btn-close-line" onClick={()=>navigate(-1)}></div>
             </div>
             <div className="modal__scroll">
               <form

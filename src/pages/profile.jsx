@@ -33,10 +33,11 @@ export const ProfilePage = ()  => {
     useEffect(() => {
         dispatch(fetchAds());
         dispatch(fetchAllImages());
-      }, []);
+      }, [userData]);
 
 
    useEffect(() => {
+    console.log(userData)
         dispatch(fetchUserInput({token}))
       }, [userData]);
 
@@ -50,11 +51,11 @@ export const ProfilePage = ()  => {
       
 
 // Перенаправляем пользователя на страницу логирования если нет токена
-// useEffect(() => {
-//     if(token.length == 0){
-//         navigate("/login");
-//     }
-//   }, [token]);
+useEffect(() => {
+    if(token.length == 0){
+        navigate("/login");
+    }
+  }, [token]);
 
 
 
@@ -229,7 +230,6 @@ console.log(userEmail);
 
 {userAdv.map((oneAds) => {
        
-       console.log(oneAds);
                     
                     return (
                       <CardsItem
@@ -243,27 +243,6 @@ console.log(userEmail);
                     );
                   })}
 
-
-
-                            {/* <div className="cards__item">
-                                <div className="cards__card card">
-                                    <div className="card__image">
-                                        <a href="/" target="_blank"> */}
-                                            {/* <img src="#" alt="picture"/> */}
-                                        {/* </a>
-                                    </div>
-                                    <div className="card__content">
-                                        <a href="/" target="_blank">
-                                            <h3 className="card__title">Ракетка для большого тенниса Triumph Pro ST</h3>
-                                        </a>
-                                        <p className="card__price">2&nbsp;200&nbsp;₽</p>
-                                        <p className="card__place">Санкт Петербург</p>
-                                        <p className="card__date">Сегодня в&nbsp;10:45</p>
-                                    </div>
-                                </div>
-                            </div> */}
-
- 
                         </div>                        
                     </div>
                     

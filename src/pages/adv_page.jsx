@@ -74,10 +74,7 @@ let imgArr = [];
 
   }
 
-  const linkToSellerPage =() =>{
-
-    
-  }
+  
   
 
 
@@ -120,6 +117,7 @@ return(
                         <div className="artic__content article">                           
                             <div className="article__left">
                                 <div className="article__fill-img">
+                                    
                                     <div className="article__img">                                        
                                             <img src={`${imgUrl}`} alt="mein Image"/>                                        
                                     </div>                                    
@@ -173,7 +171,7 @@ return(
                                         </div>
                                         <div className="author__cont">
                                         <Link to='/seller_profile'>
-                                            <a className="author__name" onClick={()=>linkToSellerPage()}>{activeAds.user?.name}</a>
+                                            <a className="author__name" >{activeAds.user?.name}</a>
                                         </Link>
                                             
 

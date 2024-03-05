@@ -108,6 +108,15 @@ userDataChangeFailure: (state, action) => {
   
 },
 
+// Обновление токенов
+userTokenRefresh: (state, action) => {
+  
+  const user = action.payload;
+  console.log(user.access_token);
+  state.accessToken = user.access_token;
+  state.refreshToken = user.refresh_token;
+  state.loading = false;
+},
 
   
   },
@@ -126,6 +135,7 @@ export const {
     userDataChangeStart,
     userDataChangeSuccess,
     userDataChangeFailure,
+    userTokenRefresh,
 
 } = userSlice.actions;
 export default userSlice.reducer;

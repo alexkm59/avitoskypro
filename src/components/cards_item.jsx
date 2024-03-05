@@ -10,6 +10,7 @@ import { TimeTransform } from "./time_transform";
 export const CardsItem = ({ id, title, price, city, time, imagesId }) => {
   const dispatch = useDispatch();
   const allImages = useSelector((state) => state.images.allImages);
+  const userId = useSelector((state)=> state.user.userId);
   const URL = "http://localhost:8090/";
   let imgUrl;
 
@@ -46,13 +47,21 @@ export const CardsItem = ({ id, title, price, city, time, imagesId }) => {
           </Link>
         </div>
         <div className="card__content">
-          <Link to="/adv_page">
+          
+          {!userId ? (<Link to="/adv_page">
             <a href="/" target="_blank" onClick={() => {
                 setActiveAds(id);
               }}>
               <h3 className="card__title">{title}</h3>
             </a>
-          </Link>
+          </Link>):(<Link to="/adv_page/myads">
+            <a href="/" target="_blank" onClick={() => {
+                setActiveAds(id);
+              }}>
+              <h3 className="card__title">{title}</h3>
+            </a>
+          </Link>)}
+          
 
           <p className="card__price">{price}₽</p>
           <p className="card__place">{city}</p>
