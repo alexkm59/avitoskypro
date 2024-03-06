@@ -126,6 +126,7 @@ export const MainPage = () => {
                         city={oneAds.user.city}
                         time={oneAds.created_on}
                         imagesId={oneAds?.images[0]?.id}
+                        adsOwner = {oneAds.user.id}
                       />
                     );
                   })}

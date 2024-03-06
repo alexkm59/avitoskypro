@@ -7,18 +7,31 @@ import { fetchAllImages, getActiveAdsId } from "../store/thunks/thunk";
 import { TimeTransform } from "./time_transform";
 
 
-export const CardsItem = ({ id, title, price, city, time, imagesId }) => {
+export const CardsItem = ({ id, title, price, city, time, imagesId, adsOwner }) => {
   const dispatch = useDispatch();
   const allImages = useSelector((state) => state.images.allImages);
+  const activeAdsId = useSelector((state) => state.ads.activeAdsId);
+  const allAds = useSelector((state) => state.ads.allAds);
   const userId = useSelector((state)=> state.user.userId);
   const URL = "http://localhost:8090/";
   let imgUrl;
-
+  let activeAds = null;
+  
   const setActiveAds = (id) => {
     console.log(`Выбрано объявление №${id}`);
     dispatch(getActiveAdsId(id));
   };
 
+console.log(userId);
+console.log(adsOwner);
+
+  // поиск выбранного объявления activeAds по ID
+  if (activeAdsId) {
+    let idToLookFor = activeAdsId;
+    activeAds = allAds.find(function (item) {
+      return item.id === idToLookFor;
+    });
+  }
 
   if (imagesId) {
     console.log(allImages);
@@ -48,7 +61,7 @@ export const CardsItem = ({ id, title, price, city, time, imagesId }) => {
         </div>
         <div className="card__content">
           
-          {!userId ? (<Link to="/adv_page">
+          {(userId !== adsOwner) ? (<Link to="/adv_page">
             <a href="/" target="_blank" onClick={() => {
                 setActiveAds(id);
               }}>
