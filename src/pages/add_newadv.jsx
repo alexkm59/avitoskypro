@@ -138,7 +138,7 @@ useEffect(() => {
           <div className="modal__content">
             <h3 className="modal__title">Новое объявление</h3>
             <div className="modal__btn-close">
-              <div className="modal__btn-close-line"></div>
+              <div className="modal__btn-close-line" onClick={()=>navigate(-1)}></div>
             </div>
             <form
               className="modal__form-newArt form-newArt"
