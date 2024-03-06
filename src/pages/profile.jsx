@@ -1,198 +1,247 @@
-import {React} from 'react';
+import {React, useEffect, useState} from 'react';
 import '../css/profile.css';
 import {Link, useNavigate} from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAds, fetchAllImages, fetchUserDataChange, fetchUserInput } from '../store/thunks/thunk';
+import { getUserAds, postUserAvatarApi } from '../api';
+import { CardsItem } from '../components/cards_item';
 export const ProfilePage = ()  => {
-return(
 
-    <div class="wrapper">
-        <div class="container">
-            <header class="header">
-                <nav class="header__nav">
-                    <div class="header__logo logo-mob">
-                        <a class="logo-mob__link" href="/" target="_blank">
-                            <img class="logo-mob__img" src="img/logo-mob.png" alt="logo"/>
+    const token = useSelector((state)=> state.user.accessToken);
+   
+    const activeUser = useSelector((state) => state.user);
+    const userName = useSelector((state)=> state.user.userName);
+    const userSurname = useSelector((state)=> state.user.userSurname);
+    const userCity = useSelector((state)=> state.user.userCity);
+    const userPhone = useSelector((state)=> state.user.userPhone);
+    const userAvatar = useSelector((state)=> state.user.userAvatar);
+    const userEmail = useSelector((state)=> state.user.userEmail);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const URL = "http://localhost:8090/";
+    const [userData, setUserData] = useState({
+        name: "",
+        surname: "",
+        city: "",
+        phone: "",
+        avatar:"",
+        isChange: false,
+    });
+
+    const [userAdv, setUserAdv] = useState([]);
+// получаем все картинки и записываем в СТОР
+    useEffect(() => {
+        dispatch(fetchAds());
+        dispatch(fetchAllImages());
+      }, [userData]);
+
+
+   useEffect(() => {
+    console.log(userData)
+        dispatch(fetchUserInput({token}))
+      }, [userData]);
+
+    //   Получаем объявления пользователя
+      useEffect(() => {
+         getUserAds({token}).then((meAdv)=>setUserAdv(meAdv)).then(console.log(userAdv));
+         console.log(userAdv);
+      }, []);
+      
+      
+      
+
+// Перенаправляем пользователя на страницу логирования если нет токена
+useEffect(() => {
+    if(token.length == 0){
+        navigate("/login");
+    }
+  }, [token]);
+
+
+
+
+// функция обновления состояния данных пользователя
+const handleInputChange = (e) =>{
+    const {name, value} = e.target; // Извлекаем имя поля и его значение
+    console.log(e.target.value);
+    console.log(name);
+    console.log(value);
+    setUserData({
+        ...userData, // Копируем текущие данные из состояния
+        [name]: value,
+        isChange: true,
+      });
+      console.log(userData.name);
+    
+}
+
+// функция обновления аватарки пользователя
+const handleAvatarChange = (e) =>{
+    
+    setUserData({
+        ...userData, // Копируем текущие данные из состояния
+        avatar: e.target.files[0], // Обновляем нужное поле
+      }); 
+}
+
+
+
+useEffect(() => {
+    console.log(userData.avatar);
+    postUserAvatarApi({token: token, file: userData.avatar})
+  }, [userData.avatar]);
+
+ 
+const sendNewUserData = ()=>{
+    
+    let newName ="";
+    let newSurname ="";
+    let newCity ="";
+    userData.name ? (newName = userData.name):(newName = userName);
+    userData.surname ? (newSurname = userData.surname):(newSurname = userSurname);
+    userData.city ? (newCity = userData.city) : (newCity = userCity);
+    
+    console.log(userData.name);
+    console.log(userData.surname);
+console.log(userEmail);
+    console.log(newName);
+    console.log(newSurname);
+
+    dispatch(fetchUserDataChange({token, email: userEmail, name: newName, surname: newSurname, city: newCity}));
+    setUserData({
+        ...userData,
+        isChange: false,
+      });
+
+    
+
+}
+
+
+
+
+    return(
+
+    <div className="wrapper">
+        <div className="container">
+            <header className="header">
+                <nav className="header__nav">
+                    <div className="header__logo logo-mob">
+                        <a className="logo-mob__link" href="/" target="_blank">
+                            <img className="logo-mob__img" src="img/logo-mob.png" alt="logo"/>
                         </a>
                     </div>
-                    <button class="header__btn-putAd btn-hov01" id="btputAd">Разместить объявление</button>
-                    <button class="header__btn-lk btn-hov01" id="btnlk">Личный кабинет</button>
+                    <Link to="/add_new_adv">
+                        <button className="header__btn-putAd btn-hov01" id="btputAd">Разместить объявление</button>
+                    </Link>
+                   
+                    <button className="header__btn-lk btn-hov01" id="btnlk">Личный кабинет</button>
                 </nav>
             </header>
-            <main class="main">
+            <main className="main">
                 
-                <div class="main__container">
-                    <div class="main__center-block">
-                        <div class="main__menu menu">
-                            <a class="menu__logo-link" href="/" target="_blank">
-                                <img class="menu__logo-img" src="img/logo.png" alt="logo"/>
+                <div className="main__container">
+                    <div className="main__center-block">
+                        <div className="main__menu menu">
+                            <a className="menu__logo-link" href="/" target="_blank">
+                                <img className="menu__logo-img" src="img/logo.png" alt="logo"/>
                             </a>
-                            <form class="menu__form" action="#">
-                                <button class="menu__btn btn-hov02" id="btnGoBack">Вернуться на&nbsp;главную</button>
+                            <form className="menu__form">
+                            <Link to="/">
+                                <button className="menu__btn btn-hov02" id="btnGoBack">Вернуться на&nbsp;главную</button>
+                                </Link>
                             </form>
                         
                         </div>
                         
-                        <h2 class="main__h2">Здравствуйте, Александр Михайлович!</h2>
+                        <h2 className="main__h2">Здравствуйте, {userName}!</h2>
                         
-                        <div class="main__profile profile">
-                            <div class="profile__content">
-                                <h3 class="profile__title title">Настройки профиля</h3>
-                                <div class="profile__settings settings">
-                                    <div class="settings__left">
-                                        <div class="settings__img">
+                        <div className="main__profile profile">
+                            <div className="profile__content">
+                                <h3 className="profile__title title">Настройки профиля</h3>
+                                <div className="profile__settings settings">
+                                    <div className="settings__left">
+                                        <div className="settings__img">
                                             <a href="/" target="_self">
-                                                <img src="#" alt=""/>
+                                                <img src={`${URL}`+`${userAvatar}`} alt="avatar"/>
                                             </a>
                         
                                         </div>
-                                        <a class="settings__change-photo" href="/" target="_self">
+                                        {/* <a className="settings__change-photo" target="_self" >
                                             Заменить
-                                        </a>
+                                        </a> */}
+                                        <input
+                                        
+                                        className="input"
+                                        type="file"
+                                        name="avatar"
+                                        id="userPhoto"
+                                        hidden
+                                        onChange={handleAvatarChange}
+                                        />
+                                       <button >
+                                            <label
+                                            htmlFor="userPhoto"
+                                            className="settings__change-photo" target="_self"
+                                            >
+                                            Заменить
+                                            </label>
+                                       </button>
+                                         
+
                                     </div>
-                                    <div class="settings__right">
-                                        <form class="settings__form" action="#">
-                                            <div class="settings__div">
-                                                <label for="fname">Имя</label>
-                                                <input class="settings__f-name" id="settings-fname" name="fname" type="text" value="Ан" placeholder=""/>
+                                    <div className="settings__right">
+                                        <form className="settings__form" action="#">
+                                            <div className="settings__div">
+                                                <label htmlFor="fname">Имя</label>
+                                                <input className="settings__f-name" id="settings-fname" name="name" type="text" defaultValue={`${userName}`} placeholder="" onChange={handleInputChange}></input>
                                             </div>
                         
-                                            <div class="settings__div">
-                                                <label for="lname">Фамилия</label>
-                                                <input class="settings__l-name" id="settings-lname" name="lname" type="text" value="Городецкий" placeholder=""/>
+                                            <div className="settings__div">
+                                                <label htmlFor="lname">Фамилия</label>
+                                                <input className="settings__l-name" id="settings-lname" name="surname" type="text" defaultValue={`${userSurname}`} placeholder="" onChange={handleInputChange}></input>
                                             </div>
                         
-                                            <div class="settings__div">
-                                                <label for="city">Город</label>
-                                                <input class="settings__city" id="settings-city" name="city" type="text" value="Санкт-Петербург" placeholder=""/>
+                                            <div className="settings__div">
+                                                <label htmlFor="city">Город</label>
+                                                <input className="settings__city" id="settings-city" name="city" type="text" defaultValue={`${userCity}` } placeholder="" onChange={handleInputChange}/>
                                             </div>
                         
-                                            <div class="settings__div">
-                                                <label for="phone">Телефон</label>
-                                                <input class="settings__phone" id="settings-phone" name="phone" type="tel" value="89161234567" placeholder="+79161234567"/>
+                                            <div className="settings__div">
+                                                <label htmlFor="phone">Телефон</label>
+                                                <input className="settings__phone" id="settings-phone" name="phone" type="tel" defaultValue={`${userPhone}`} placeholder="+79161234567"/>
                                             </div>
-                        
-                                            <button class="settings__btn btn-hov02" id="settings-btn">Сохранить</button>
+                                            {userData.isChange ? (<div className="settings__btn btn-hov02" id="settings-btn" onClick={()=>sendNewUserData()}>Сохранить</div>):(<button className="settings__btn_notActive" disabled="true"  id="settings-btn">Сохранить</button>) }
+                                            
                                         </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <h3 class="main__title title">
+                        <h3 className="main__title title">
                             Мои товары
                         </h3>
                     </div>
-                    <div class="main__content">
+                    <div className="main__content">
                         
-                        <div class="content__cards cards">                            
+                        <div className="content__cards cards">                            
+{/* Вызов компонента отрисовки объявлений */}
 
-                            <div class="cards__item">
-                                <div class="cards__card card">
-                                    <div class="card__image">
-                                        <a href="/" target="_blank">
-                                            {/* <img src="#" alt="picture"/> */}
-                                        </a>
-                                    </div>
-                                    <div class="card__content">
-                                        <a href="/" target="_blank">
-                                            <h3 class="card__title">Ракетка для большого тенниса Triumph Pro ST</h3>
-                                        </a>
-                                        <p class="card__price">2&nbsp;200&nbsp;₽</p>
-                                        <p class="card__place">Санкт Петербург</p>
-                                        <p class="card__date">Сегодня в&nbsp;10:45</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="cards__item">
-                                <div class="cards__card card">
-                                    <div class="card__image">
-                                        <a href="/" target="_blank">
-                                            {/* <img src="#" alt="picture"/> */}
-                                        </a>
-                                    </div>
-                                    <div class="card__content">
-                                        <a href="/" target="_blank">
-                                            <h3 class="card__title">Ракетка для большого тенниса Triumph Pro ST</h3>
-                                        </a>
-                                        <p class="card__price">2&nbsp;200&nbsp;₽</p>
-                                        <p class="card__place">Санкт Петербург</p>
-                                        <p class="card__date">Сегодня в&nbsp;10:45</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="cards__item">
-                                <div class="cards__card card">
-                                    <div class="card__image">
-                                        <a href="/" target="_blank">
-                                            {/* <img src="#" alt="picture"/> */}
-                                        </a>
-                                    </div>
-                                    <div class="card__content">
-                                        <a href="/" target="_blank">
-                                            <h3 class="card__title">Ракетка для большого тенниса Triumph Pro ST</h3>
-                                        </a>
-                                        <p class="card__price">2&nbsp;200&nbsp;₽</p>
-                                        <p class="card__place">Санкт Петербург</p>
-                                        <p class="card__date">Сегодня в&nbsp;10:45</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="cards__item">
-                                <div class="cards__card card">
-                                    <div class="card__image">
-                                        <a href="/" target="_blank">
-                                            {/* <img src="#" alt="picture"/> */}
-                                        </a>
-                                    </div>
-                                    <div class="card__content">
-                                        <a href="/" target="_blank">
-                                            <h3 class="card__title">Ракетка для большого тенниса Triumph Pro ST</h3>
-                                        </a>
-                                        <p class="card__price">2&nbsp;200&nbsp;₽</p>
-                                        <p class="card__place">Санкт Петербург</p>
-                                        <p class="card__date">Сегодня в&nbsp;10:45</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="cards__item">
-                                <div class="cards__card card">
-                                    <div class="card__image">
-                                        <a href="/" target="_blank">
-                                            {/* <img src="" alt="picture"/> */}
-                                        </a>
-                                    </div>
-                                    <div class="card__content">
-                                        <a href="/" target="_blank">
-                                            <h3 class="card__title">Ракетка для большого тенниса Triumph Pro ST</h3>
-                                        </a>
-                                        <p class="card__price">2&nbsp;200&nbsp;₽</p>
-                                        <p class="card__place">Санкт Петербург</p>
-                                        <p class="card__date">Сегодня в&nbsp;10:45</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="cards__item">
-                                <div class="cards__card card">
-                                    <div class="card__image">
-                                        <a href="/" target="_blank">
-                                            {/* <img src="#" alt="picture"/> */}
-                                        </a>
-                                    </div>
-                                    <div class="card__content">
-                                        <a href="/" target="_blank">
-                                            <h3 class="card__title">Ракетка для большого тенниса Triumph Pro ST</h3>
-                                        </a>
-                                        <p class="card__price">2&nbsp;200&nbsp;₽</p>
-                                        <p class="card__place">Санкт Петербург</p>
-                                        <p class="card__date">Сегодня в&nbsp;10:45</p>
-                                    </div>
-                                </div>
-                            </div>                 
-
+{userAdv.map((oneAds) => {
+       
+                    
+                    return (
+                      <CardsItem
+                        id={oneAds.id}
+                        title={oneAds.title}
+                        price={oneAds.price}
+                        city={oneAds.user.city}
+                        time={oneAds.created_on}
+                        imagesId={oneAds?.images[0]?.id}
+                      />
+                    );
+                  })}
 
                         </div>                        
                     </div>
@@ -201,19 +250,19 @@ return(
                 
             </main>
             
-            <footer class="footer">
-                <div class="footer__container">
-                    <div class="footer__img">
+            <footer className="footer">
+                <div className="footer__container">
+                    <div className="footer__img">
                         <a href="/" target="_self">
                             <img src="img/icon_01.png" alt="home"/>
                         </a>                        
                     </div>
-                    <div class="footer__img">
+                    <div className="footer__img">
                         <a href="/" target="_self">
                             <img src="img/icon_02.png" alt="home"/>
                         </a>
                     </div>
-                    <div class="footer__img">
+                    <div className="footer__img">
                         <a href="/" target="_self">
                             <img src="img/icon_03.png" alt="home"/>
                         </a>

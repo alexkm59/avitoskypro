@@ -29,7 +29,10 @@ ul li {
 
 @font-face {
   font-family: 'StratosSkyeng';
-  src: local("StratosSkyeng"), local("StratosSkyeng"), url("../fonts/StratosSkyeng.woff2") format("woff2"), url("../fonts/StratosSkyeng.woff") format("woff"), url("../fonts/StratosSkyeng.ttf") format("truetype");
+  src: local("StratosSkyeng"),
+  local("StratosSkyeng"),
+  url("/public/fonts/StratosSkyeng.woff2") format("woff2"),
+  url("/public/fonts/StratosSkyeng.woff") format("woff");
   font-weight: 400;
   font-style: normal;
 }
@@ -153,8 +156,11 @@ a {
       -ms-flex-align: start;
           align-items: flex-start;
   width: 100%;
+  height: auto;
   overflow-y: auto;
-  scrollbar-color: #FFFFFF #2E2E2E;
+  overflow-x: hidden;
+
+  scrollbar-color: #ce4545 #2E2E2E;
   scrollbar-width: thin;
   scrollbar-width: 0px;
 }
@@ -447,3 +453,4 @@ a {
     color: #000000;
   }
 }
+

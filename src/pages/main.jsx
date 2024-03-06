@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { getAlladvertis } from "../api";
 import { useDispatch, useSelector } from "react-redux";
 import { allAdsLoading } from "../store/slices/ads";
-import { fetchAds, fetchAllImages } from "../store/thunks/thunk";
+import { fetchAds, fetchAllImages, userExitThunk } from "../store/thunks/thunk";
 import { CardsItem } from "../components/cards_item";
 
 export const MainPage = () => {
@@ -13,7 +13,12 @@ export const MainPage = () => {
   const isLoading = useSelector((state) => state.ads.loading);
   const error = useSelector((state) => state.ads.error);
   const allImages = useSelector((state) => state.images.allImages);
+  const userId = useSelector((state)=> state.user.userId);
+  const [isSearchActive, setIsSearchActive] = useState(false);
+  const [serchAdss, setSerchAdss] = useState([]);
 
+  let adsForView = [];
+  
   useEffect(() => {
     
     dispatch(fetchAds());
@@ -21,14 +26,58 @@ export const MainPage = () => {
     // })
   }, []);
 
-  if (isLoading) {
-    console.log(`Идет загрузка...`);
+  const exitFunction =()=>{
+      dispatch(userExitThunk());
+
   }
 
-  if (allAds) {
-    console.log(`Объявления получены`);
-    
+   // Функция поиска
+const sertchFunction = (el) =>{
+  let sertchAds=[];
+  console.log(el.length);
+  if (el.length > 0){
+    setIsSearchActive(true);
+  }else{
+    setIsSearchActive(false);
   }
+
+  for (let i = 0; i < allAds?.length; i++){
+    if(allAds[i].title.toLowerCase().includes(el)){
+      sertchAds.push(allAds[i].title.toLowerCase());
+    }
+  }
+  
+  console.log(sertchAds);
+  
+
+  if(sertchAds.length > 0){
+    
+    let checkArray = allAds;
+    let NewAllArray = [];
+
+    for (let i = 0; i < sertchAds.length; i++) {
+      for(let j = 0; j < checkArray.length; j++){
+        if(checkArray[j].title.toLowerCase() === sertchAds[i].toLowerCase()){
+          NewAllArray.push(checkArray[j])
+        }
+      }
+    }
+    
+      console.log(NewAllArray);
+      setSerchAdss(NewAllArray);
+
+  }else{
+    let NewAllArray = [];
+    setSerchAdss(NewAllArray);
+  }
+
+  
+}
+
+serchAdss?.length ?  (adsForView = serchAdss):(adsForView = allAds);
+ 
+
+  
 
   console.log(allAds);
   console.log(allImages);
@@ -38,6 +87,16 @@ export const MainPage = () => {
         <div className="container">
           <header className="header">
             <nav className="header__nav">
+
+  {userId ? (
+                <button
+                  className="header__btn-main-enter btn-hov01"
+                  id="btnMainEnter"
+                  onClick ={()=> exitFunction()}
+                >Выйти
+                </button>
+              ):(
+              
               <Link to="/login">
                 <button
                   className="header__btn-main-enter btn-hov01"
@@ -45,7 +104,12 @@ export const MainPage = () => {
                 >
                   Вход в личный кабинет
                 </button>
-              </Link>
+              </Link>)}
+
+             
+              
+            
+            
             </nav>
           </header>
           <main className="main">
@@ -66,6 +130,7 @@ export const MainPage = () => {
                   type="search"
                   placeholder="Поиск по объявлениям"
                   name="search"
+                  onChange={(event)=> sertchFunction(event.target.value)}
                 />
                 <input
                   className="search__text-mob"
@@ -73,7 +138,14 @@ export const MainPage = () => {
                   placeholder="Поиск"
                   name="search-mob"
                 />
-                <button className="search__btn btn-hov02">Найти</button>
+                
+                <div className="search__btn btn-hov02">
+                  <div>
+                    Найти
+                  </div>
+                
+                  </div>
+              
               </form>
             </div>
             <div className="main__container">
@@ -86,20 +158,27 @@ export const MainPage = () => {
                 <div className="content__cards main_cards">
                   {/* Вызов компонента отрисовки объявлений */}
 
-                  {allAds.map((oneAds) => {
+                  {(isSearchActive && serchAdss.length === 0) ? (<div>Ничего не найдено...</div>):(
+                    adsForView.map((oneAds) => {
                     
                     
                     return (
+
                       <CardsItem
-                        key={oneAds.id}
+                        id={oneAds.id}
                         title={oneAds.title}
                         price={oneAds.price}
                         city={oneAds.user.city}
                         time={oneAds.created_on}
                         imagesId={oneAds?.images[0]?.id}
+                        adsOwner = {oneAds.user.id}
                       />
-                    );
-                  })}
+                      
+                    )
+                  })
+                  )
+                  }
+                  
                 </div>
               </div>
             </div>

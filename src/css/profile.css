@@ -340,7 +340,24 @@ a {
   background-color: #009EE4;
   border-radius: 6px;
   border: 1px solid #009EE4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
+.settings__btn_notActive {
+  font-size: 16px;
+  line-height: 1;
+  color: #FFFFFF;
+  width: 154px;
+  height: 50px;
+  margin: 10px 7px 0;
+  background-color: #c6c8c9;
+  border-radius: 6px;
+  border: 1px solid #c6c8c9;
+}
+
+
 
 .cards {
   max-width: 1158px;
