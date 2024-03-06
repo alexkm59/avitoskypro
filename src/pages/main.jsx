@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { getAlladvertis } from "../api";
 import { useDispatch, useSelector } from "react-redux";
 import { allAdsLoading } from "../store/slices/ads";
-import { fetchAds, fetchAllImages } from "../store/thunks/thunk";
+import { fetchAds, fetchAllImages, userExitThunk } from "../store/thunks/thunk";
 import { CardsItem } from "../components/cards_item";
 
 export const MainPage = () => {
@@ -13,6 +13,7 @@ export const MainPage = () => {
   const isLoading = useSelector((state) => state.ads.loading);
   const error = useSelector((state) => state.ads.error);
   const allImages = useSelector((state) => state.images.allImages);
+  const userId = useSelector((state)=> state.user.userId);
 
   useEffect(() => {
     
@@ -21,7 +22,10 @@ export const MainPage = () => {
     // })
   }, []);
 
+  const exitFunction =()=>{
+      dispatch(userExitThunk());
 
+  }
 
   
   if (isLoading) {
@@ -41,6 +45,16 @@ export const MainPage = () => {
         <div className="container">
           <header className="header">
             <nav className="header__nav">
+
+  {userId ? (
+                <button
+                  className="header__btn-main-enter btn-hov01"
+                  id="btnMainEnter"
+                  onClick ={()=> exitFunction()}
+                >Выйти
+                </button>
+              ):(
+              
               <Link to="/login">
                 <button
                   className="header__btn-main-enter btn-hov01"
@@ -48,7 +62,12 @@ export const MainPage = () => {
                 >
                   Вход в личный кабинет
                 </button>
-              </Link>
+              </Link>)}
+
+             
+              
+            
+            
             </nav>
           </header>
           <main className="main">
@@ -76,7 +95,14 @@ export const MainPage = () => {
                   placeholder="Поиск"
                   name="search-mob"
                 />
-                <button className="search__btn btn-hov02">Найти</button>
+                
+                <div className="search__btn btn-hov02">
+                  <div>
+                    Найти
+                  </div>
+                
+                  </div>
+              
               </form>
             </div>
             <div className="main__container">

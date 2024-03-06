@@ -42,6 +42,7 @@ import {
     userDataChangeSuccess,
     userDataChangeFailure,
     userTokenRefresh,
+    userExit,
 } from "../slices/user";
 
 // import {activeAdsIdLoading} from "../slices/adsItem"
@@ -188,5 +189,8 @@ export const fetchUserInput = ({token}) => async (dispatch, getState) => {
     
   };
 
-  
+  export const userExitThunk = () => async (dispatch, getState) =>{
+    dispatch(userExit());
+
+  };
   

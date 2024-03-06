@@ -118,7 +118,28 @@ userTokenRefresh: (state, action) => {
   state.loading = false;
 },
 
-  
+// выход пользователя
+
+userExit: (state, action) => {
+  const user = action.payload;
+  state.userId = null;
+  state.userEmail = "";  
+  state.userName = "";
+  state.userSurname = "";
+  state.userCity = "";
+  state.userSellsFrom = "";
+  state.userPhone = "";
+  state.userAvatar = "";
+  state.loading = false;
+  state.accessToken = "";
+  state.refreshToken = "";
+
+},
+
+
+
+
+
   },
 });
 
@@ -136,6 +157,7 @@ export const {
     userDataChangeSuccess,
     userDataChangeFailure,
     userTokenRefresh,
+    userExit,
 
 } = userSlice.actions;
 export default userSlice.reducer;
